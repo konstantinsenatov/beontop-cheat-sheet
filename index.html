@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeOnTop Cheat Sheet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            min-height: 100vh;
+        }
+
+        .tabs-section {
+            padding: 2rem 2rem 0 2rem;
+        }
+
+        .content-container {
+            display: block;
+            padding: 2rem;
+        }
+
+        /* Двухколоночный ряд внутри каждой секции */
+        .section {
+            display: flex;
+            gap: 1.5rem;
+            align-items: stretch;
+        }
+        .section-media {
+            flex: 1;
+            min-height: 220px;
+            background: #dee2e6;
+            border-radius: 8px;
+            border: 1px dashed #adb5bd;
+            background-size: contain;
+            background-position: top center;
+            background-repeat: no-repeat;
+        }
+        .section-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.5rem 0.75rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            opacity: 0.9;
+            transition: all 0.2s ease;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .copy-button:hover {
+            opacity: 1;
+            background: #0056b3;
+        }
+
+        .copy-button.copied {
+            background: #28a745;
+            opacity: 1;
+        }
+
+        .content-section {
+            flex: 1;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tabs-container {
+            width: 100%;
+        }
+
+        .tabs-nav {
+            display: flex;
+            border-bottom: 2px solid #e9ecef;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+
+        .tab-button {
+            background: none;
+            border: none;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #6c757d;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            position: relative;
+            white-space: nowrap;
+            min-width: fit-content;
+        }
+
+        .tab-button:hover {
+            color: #495057;
+            background-color: #f8f9fa;
+        }
+
+        .tab-button.active {
+            color: #007bff;
+            border-bottom-color: #007bff;
+            background-color: #f8f9fa;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 1.5rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            min-height: 300px;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background-color: #ffffff;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+        }
+
+        .section h4 {
+            margin-bottom: 1rem;
+            color: #495057;
+            font-size: 1.1rem;
+        }
+
+        .section pre {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 6px;
+            border: 1px solid #dee2e6;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .section:hover {
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+            background-color: #fcfcfd;
+        }
+
+        @media (max-width: 768px) {
+            .section {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Секция с табами -->
+        <div class="tabs-section">
+            <div class="tabs-container">
+                <div class="tabs-nav">
+                    <button class="tab-button active" data-tab="banners">Banners</button>
+                    <button class="tab-button" data-tab="benefits">Benefits</button>
+                    <button class="tab-button" data-tab="faqs">FAQs</button>
+                    <button class="tab-button" data-tab="galleries">Galleries</button>
+                    <button class="tab-button" data-tab="testimonials">Testimonials</button>
+                    <button class="tab-button" data-tab="textblocks">TextBlocks</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Контент: внутри каждого таба секции идут рядами (изображение + контент) -->
+        <div class="content-container">
+            <div class="content-section">
+                <div class="tab-content active" id="banners">
+                    <h3>Banners</h3>
+
+
+                    <div class="section" data-image="https://beontop.netlify.app/16x9-1600x900.jpg">
+                        <div class="section-media"></div>
+                        <div class="section-content">
+                        <h4>Banner Left Split</h4>
+                        <pre>/* start */
+LAYOUT: Banner left split
+ALIGN: left
+VALIGN: center
+MIN HEIGHT: 320
+CONTAINER ALIGN: center
+BG: https://beontop.netlify.app/16x9-1600x900.jpg
+OVERLAY: 0.45
+TITLE COLOR: #FFFFFF
+TEXT COLOR: #FFFFFF
+RADIUS SECTION: 20
+PADDING SECTION: 48 24
+BORDER SECTION: none
+BG CONTAINER: none
+OVERLAY CONTAINER: none
+RADIUS CONTAINER: 0
+PADDING CONTAINER: 24 24
+BORDER CONTAINER: none
+LINK COLOR: #ffffff
+LINK WEIGHT: 600
+LINK UNDERLINE: hover
+BTN COLOR: #FFFFFF
+BTN BG: linear-gradient(90deg, rgba(255,255,255,0.28), rgba(255,255,255,0.06))
+BTN RADIUS: pill
+BTN BORDER: 1px solid #FFFFFF
+Premium Car Detailing in Dubai
+Top products & pro equipment. 
+Ask about paint correction and ceramic coating.
+CTA: Book now | /book
+BTN: Get a quote | /quote
+/* end */</pre>
+                        </div>
+                    </div>
+
+                    <div class="section" data-image="https://beontop.netlify.app/16x9-1600x900.jpg">
+                        <div class="section-media"></div>
+                        <div class="section-content">
+                        <h4>Banner Center Split</h4>
+                        <pre>/* start */
+LAYOUT: Banner center split
+ALIGN: center
+VALIGN: center
+MIN HEIGHT: 300
+HERO WIDTH: 900
+CONTAINER WIDTH: 1100 | 88%
+CONTAINER ALIGN: center
+BG: #F6F8FA
+OVERLAY: off
+TITLE COLOR: #0F172A
+TEXT COLOR: #0F172A
+RADIUS SECTION: 0
+PADDING SECTION: 0
+BORDER SECTION: 1px solid #E5E7EB
+BG CONTAINER: linear-gradient(180deg, rgba(255,192,0,0.07), rgba(0,0,0,0))
+OVERLAY CONTAINER: none
+RADIUS CONTAINER: 24
+PADDING CONTAINER: 28 28
+BORDER CONTAINER: 1px solid rgba(255,192,0,0.07)
+LINK COLOR: #000000
+LINK WEIGHT: 600
+LINK UNDERLINE: off
+BTN COLOR: #000000
+BTN BG: #ffffff
+BTN RADIUS: 10
+BTN BORDER: 1px solid #000000
+Detailing Bundle Sale
+Save up to 20% on interior + exterior packages. 
+* Limited slots — see terms.
+BTN: View services | /services
+/* end */</pre>
+                        </div>
+                    </div>
+
+                    <div class="section" data-image="https://beontop.netlify.app/16x9-1600x900.jpg">
+                        <div class="section-media"></div>
+                        <div class="section-content">
+                        <h4>Banner Right</h4>
+                        <pre>/* start */
+LAYOUT: Banner right
+ALIGN: right
+VALIGN: bottom
+HEADING: H2
+MIN HEIGHT: 420
+HERO WIDTH: 1000
+CONTAINER WIDTH: 1100 | 92%
+CONTAINER ALIGN: center
+BG: https://beontop.netlify.app/16x9-1600x900.jpg
+OVERLAY: linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.75))
+TITLE COLOR: #FFFFFF
+TEXT COLOR: #E8F0FE
+RADIUS SECTION: 20
+PADDING SECTION: 48 24
+BORDER SECTION: none
+BG CONTAINER: none
+OVERLAY CONTAINER: none
+RADIUS CONTAINER: 0
+PADDING CONTAINER: 0
+BORDER CONTAINER: none
+LINK COLOR: #FFFFFF
+LINK WEIGHT: 600
+LINK UNDERLINE: on
+BTN COLOR: #111111
+BTN BG: #FFFFFF
+BTN RADIUS: 9999
+BTN BORDER: 2px solid #FFFFFF
+TITLE: Business-Class Detailing
+Restore deep gloss and protect with ceramic coatings. Free consultation.
+CTA: Consultation | /consultation
+BTN: Get a quote | /quote
+/* end */</pre>
+                        </div>
+                    </div>
+
+                    <div class="section" data-image="https://beontop.netlify.app/16x9-1600x900.jpg">
+                        <div class="section-media"></div>
+                        <div class="section-content">
+                        <h4>Banner Left</h4>
+                        <pre>/* start */
+LAYOUT: Banner left
+ALIGN: center
+VALIGN: center
+HEADING: H1
+MIN HEIGHT: 420
+HERO WIDTH: 900
+CONTAINER WIDTH: 1000 | 88%
+CONTAINER ALIGN: center
+BG: #FAFAFA
+OVERLAY: off
+TITLE COLOR: #0F172A
+TEXT COLOR: #0F172A
+RADIUS SECTION: 12
+PADDING SECTION: 36 20
+BORDER SECTION: 1px solid #EEEEEE
+BG CONTAINER: url('https://beontop.netlify.app/16x9-1600x900.jpg')
+OVERLAY CONTAINER: rgba(0,0,0,0)
+RADIUS CONTAINER: 12
+PADDING CONTAINER: 32 32
+BORDER CONTAINER: 1px solid rgba(0,0,0,0.08)
+LINK COLOR: #0F172A
+LINK WEIGHT: 500
+LINK UNDERLINE: hover
+BTN COLOR: #FFFFFF
+BTN BG: linear-gradient(90deg, #2563EB, #7C3AED)
+BTN RADIUS: 14
+BTN BORDER: none
+TITLE: Complete Car Makeover
+Polishing, interior deep clean, PPF. Browse projects and customer reviews.
+BTN: Contact us | /contact
+/* end */</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="benefits">
+                    <h3>Benefits</h3>
+                    <div class="section" data-image="https://beontop.netlify.app/16x9-1600x900.jpg">
+                        <div class="section-media"></div>
+                        <div class="section-content">
+                        <h4>Our Services</h4>
+                        <pre>/* start */
+LAYOUT: Media left
+TITLE: Our Services
+HEADING: H2
+COLS: 40 60
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | Premium Car Detailing
+DESC TOP: This is helper text above content
+DESC TOP ALIGN: left
+Interior Detailing
+Deep cleaning and conditioning of your car's interior surfaces.
+Exterior Detailing
+Polishing, waxing, and protection for long-lasting shine.
+Paint Protection
+Advanced ceramic coating to keep your car looking brand new.
+DESC BOTTOM: Additional helper text below content
+DESC BOTTOM ALIGN: left
+BTN: Book Now | /book
+CTA: Learn more | /contact
+/* end */</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="faqs">
+                    <h3>FAQs</h3>
+                    <div class="section" data-image="https://beontop.netlify.app/16x9-1600x900.jpg">
+                        <div class="section-media"></div>
+                        <div class="section-content">
+                        <h4>Questions & Answers</h4>
+                        <pre>/* start */
+LAYOUT: FAQ
+TITLE: Questions & Answers
+DESC TOP ALIGN: center
+DESC TOP: The most common questions from our customers.
+FAQ MODE: static
+FAQ ITEM BORDER: 1px solid #e5e7eb
+CARD RADIUS: 10
+Q: How long does shipping take?
+A: Typically 3–5 business days within the country and 5–10 days for neighboring regions.
+Q: Can I modify my order after placing it?
+A: Yes, within 2 hours via your account or by contacting support.
+Q: Do you accept returns?
+A: Yes, within 30 days of purchase — full refund.
+/* end */</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="galleries">
+                    <h3>Galleries</h3>
+                    <div class="section" data-image="https://beontop.netlify.app/16x9-1600x900.jpg">
+                        <div class="section-media"></div>
+                        <div class="section-content">
+                        <h4>Our Works Zigzag</h4>
+                        <pre>/* start */
+LAYOUT: Zigzag
+TITLE: Our works
+COLS: 40 60
+IMAGE SIZE (RATIO): 4/3
+PADDING: 24 16
+MARGIN: 0 0 30 0
+DESC TOP: краткое описание секции сверху
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | Interior detailing
+(Здесь H3 и текст абзацами)
+BTN: Book now | /book
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | Exterior detailing
+H3 Заголовок 2
+Описательный текст...
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | Protective films
+H3 Заголовок 3
+Текст...
+CTA: Get a quote | /quote
+DESC BOTTOM: примечание или дисклеймер
+/* end */</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="testimonials">
+                    <h3>Testimonials</h3>
+                    <div class="section" data-image="https://beontop.netlify.app/16x9-1600x900.jpg">
+                        <div class="section-media"></div>
+                        <div class="section-content">
+                        <h4>What Our Clients Say</h4>
+                        <pre>/* start */
+LAYOUT: Cards 3col
+TITLE: What Our Clients Say
+IMAGE SIZE (RATIO): 4/1
+CARD RADIUS: 12
+BORDER CARD: none
+CARD SHADOW: soft
+CARD ALIGN: left
+CARD TITLE COLOR: #111111
+CARD COLOR: #555555
+DESC TOP: Real stories from our clients
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | ★★★★★  Ahmed Al Nuaimi | "Very careful, fast, and reasonably priced. The car looks like new!"
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | ★★★★☆  Maria K. | "They finished the interior detailing in one day. Polite staff — I'll be back."
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | ★★★★★  Omar S. | "Best ceramic coating in Dubai. Water just beads off — top-notch!"
+/* end */</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="textblocks">
+                    <h3>TextBlocks</h3>
+                    <div class="section" data-image="https://beontop.netlify.app/16x9-1600x900.jpg">
+                        <div class="section-media"></div>
+                        <div class="section-content">
+                        <h4>Text Block Example 1</h4>
+                        <pre>/* start */
+LAYOUT: Text block
+TITLE: Welcome to Our Service
+HEADING: H2
+ALIGN: center
+BG: #f8f9fa
+PADDING: 40 20
+MARGIN: 20 0
+RADIUS: 12
+BORDER: 1px solid #e9ecef
+TITLE COLOR: #333333
+TEXT COLOR: #666666
+Welcome to our premium car detailing service. We provide professional automotive care with attention to detail and quality results.
+BTN: Learn More | /about
+CTA: Contact Us | /contact
+/* end */</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Глобальная функция для копирования секций
+        function copySection(button) {
+            const section = button.closest('.section');
+            const pre = section.querySelector('pre');
+            if (pre) {
+                navigator.clipboard.writeText(pre.innerText).then(() => {
+                    button.innerHTML = '✓';
+                    button.classList.add('copied');
+                    setTimeout(() => {
+                        button.innerHTML = '📋';
+                        button.classList.remove('copied');
+                    }, 2000);
+                }).catch(() => {
+                    // Fallback для старых браузеров
+                    const textArea = document.createElement('textarea');
+                    textArea.value = pre.innerText;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    button.innerHTML = '✓';
+                    button.classList.add('copied');
+                    setTimeout(() => {
+                        button.innerHTML = '📋';
+                        button.classList.remove('copied');
+                    }, 2000);
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            console.log('Найдено кнопок табов:', tabButtons.length);
+            console.log('Найдено контентов табов:', tabContents.length);
+
+            function extractFirstImageUrlFromText(text) {
+                const urlRegex = /(https?:\/\/[^\s'"()|]+\.(?:jpg|jpeg|png|webp|gif)|https?:\/\/[^\s'"()|]+)/i;
+                const match = text.match(urlRegex);
+                return match ? match[0] : null;
+            }
+
+            function hydrateSections(container) {
+                const sections = container.querySelectorAll('.section');
+                sections.forEach(section => {
+                    const pre = section.querySelector('pre');
+                    const text = pre ? pre.innerText : section.innerText;
+                    const explicit = section.getAttribute('data-image');
+                    const url = (explicit && explicit.trim()) || extractFirstImageUrlFromText(text);
+                    
+                    let media = section.querySelector('.section-media');
+                    if (media) {
+                        if (url) media.style.backgroundImage = 'url(' + url + ')';
+                    }
+                    
+                    let copyBtn = section.querySelector('.copy-button');
+                    if (!copyBtn) {
+                        copyBtn = document.createElement('button');
+                        copyBtn.className = 'copy-button';
+                        copyBtn.innerHTML = '📋';
+                        copyBtn.title = 'Копировать код секции';
+                        console.log('Создана кнопка копирования для секции:', section.querySelector('h4')?.textContent);
+                        
+                        copyBtn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            if (pre) {
+                                navigator.clipboard.writeText(pre.innerText).then(() => {
+                                    copyBtn.innerHTML = '✓';
+                                    copyBtn.classList.add('copied');
+                                    setTimeout(() => {
+                                        copyBtn.innerHTML = '📋';
+                                        copyBtn.classList.remove('copied');
+                                    }, 2000);
+                                }).catch(() => {
+                                    const textArea = document.createElement('textarea');
+                                    textArea.value = pre.innerText;
+                                    document.body.appendChild(textArea);
+                                    textArea.select();
+                                    document.execCommand('copy');
+                                    document.body.removeChild(textArea);
+                                    copyBtn.innerHTML = '✓';
+                                    copyBtn.classList.add('copied');
+                                    setTimeout(() => {
+                                        copyBtn.innerHTML = '📋';
+                                        copyBtn.classList.remove('copied');
+                                    }, 2000);
+                                });
+                            }
+                        });
+                        
+                        const content = section.querySelector('.section-content');
+                        if (content) {
+                            content.appendChild(copyBtn);
+                        }
+                    }
+                });
+            }
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetTab = this.getAttribute('data-tab');
+                    console.log('Клик по табу:', targetTab);
+
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+
+                    this.classList.add('active');
+                    const activeTab = document.getElementById(targetTab);
+                    if (activeTab) {
+                        activeTab.classList.add('active');
+                        hydrateSections(activeTab);
+                        console.log('Активирован таб:', targetTab);
+                    } else {
+                        console.error('Таб не найден:', targetTab);
+                    }
+                });
+            });
+            
+            const initial = document.querySelector('.tab-content.active');
+            if (initial) hydrateSections(initial);
+        });
+    </script>
+</body>
+</html>
