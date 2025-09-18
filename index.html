@@ -126,6 +126,158 @@
             background-color: #f8f9fa;
         }
 
+        .help-button {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border: none;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #ffffff;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            margin-left: 1rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+        }
+
+        .help-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(40, 167, 69, 0.4);
+        }
+
+        /* Стили для попапа */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .popup-overlay.show {
+            display: flex;
+            opacity: 1;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .popup-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 90vw;
+            max-height: 90vh;
+            width: 1000px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .popup-overlay.show .popup-content {
+            transform: scale(1);
+        }
+
+        .popup-header {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .popup-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .popup-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.2s ease;
+        }
+
+        .popup-close:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .popup-body {
+            padding: 2rem;
+            max-height: calc(90vh - 120px);
+            overflow-y: auto;
+            line-height: 1.6;
+        }
+
+        .popup-body h1 {
+            color: #007bff;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .popup-body h2 {
+            color: #495057;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .popup-body h3 {
+            color: #6c757d;
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .popup-body code {
+            background-color: #f8f9fa;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #e83e8c;
+        }
+
+        .popup-body pre {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            border-left: 4px solid #007bff;
+            margin: 1rem 0;
+        }
+
+        .popup-body ul, .popup-body ol {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+
+        .popup-body li {
+            margin: 0.5rem 0;
+        }
+
+        .popup-body blockquote {
+            border-left: 4px solid #28a745;
+            background-color: #f8fff9;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
         .tab-content {
             display: none;
             padding: 1.5rem;
@@ -201,6 +353,7 @@
                     <button class="tab-button" data-tab="galleries">Galleries</button>
                     <button class="tab-button" data-tab="testimonials">Testimonials</button>
                     <button class="tab-button" data-tab="textblocks">TextBlocks</button>
+                    <button class="help-button" onclick="openCheatsheet()">📖 Cheatsheet</button>
                 </div>
             </div>
         </div>
@@ -630,6 +783,342 @@ CTA: Contact Us | /contact
             const initial = document.querySelector('.tab-content.active');
             if (initial) hydrateSections(initial);
         });
+
+        // Функции для работы с попапом шпаргалки
+        function openCheatsheet() {
+            const popup = document.getElementById('cheatsheetPopup');
+            const content = document.getElementById('cheatsheetContent');
+            
+            // Заполняем контент переведенной шпаргалкой
+            content.innerHTML = getTranslatedCheatsheet();
+            
+            popup.classList.add('show');
+            document.body.style.overflow = 'hidden'; // Блокируем скролл страницы
+        }
+
+        function closeCheatsheet() {
+            const popup = document.getElementById('cheatsheetPopup');
+            popup.classList.remove('show');
+            document.body.style.overflow = ''; // Восстанавливаем скролл
+        }
+
+        // Закрытие по клику на overlay
+        document.getElementById('cheatsheetPopup').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeCheatsheet();
+            }
+        });
+
+        // Закрытие по Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeCheatsheet();
+            }
+        });
+
+        // BeOnTop Cheatsheet (English)
+        function getTranslatedCheatsheet() {
+            return `
+                <h1>BeOnTop Directives Cheatsheet</h1>
+                <p>Below are short "recipes" for creating HTML sections. Each directive is written on one line. Everything not recognized as a directive becomes regular text/heading/list.</p>
+
+                <h2>Section Markup</h2>
+                <ul>
+                    <li><code>/* start */</code> — start of section</li>
+                    <li><code>/* end */</code> — end of section</li>
+                </ul>
+                <blockquote>
+                    <strong>Important:</strong> Everything outside start/end pairs is ignored. If you forget <code>/* end */</code> — the section will close at the end of the document.<br>
+                    <code>LAYOUT:</code> inside a section sets its type, but does <strong>not open</strong> a new section.
+                </blockquote>
+
+                <h2>Basic Content Blocks</h2>
+                <ul>
+                    <li><strong>Headings:</strong> use Heading 1–4 styles in Google Docs (H1–H4).</li>
+                    <li><strong>Regular text:</strong> any line.</li>
+                    <li><strong>Lists:</strong> numbered/bulleted — will be preserved.</li>
+                    <li><code>LEAD: Text</code> — accent paragraph (lead).</li>
+                    <li><strong>Buttons/Links:</strong>
+                        <ul>
+                            <li><code>BTN: Text | https://…</code></li>
+                            <li><code>CTA: Text | https://…</code> (button synonym)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Images:</strong>
+                        <ul>
+                            <li>For <strong>media/zigzag</strong>: <code>IMG: https://… | Alt</code></li>
+                            <li>For <strong>gallery</strong>: <code>IMG: https://… | alt | caption</code></li>
+                            <li>For <strong>cards</strong>: <code>IMG: https://… | Title | Description | Button | https://…</code></li>
+                            <li>Icon card: <code>ICON: 🙂 | Title | Description | Button | https://…</code></li>
+                        </ul>
+                    </li>
+                    <li><strong>Image caption</strong> (media/zigzag): <code>CAP: Caption</code></li>
+                </ul>
+
+                <h2>Section Type (LAYOUT)</h2>
+                <ul>
+                    <li><code>LAYOUT: Media left|right|stack</code> — image + text (default left)</li>
+                    <li><code>LAYOUT: Text</code> or <code>LAYOUT: Text block</code> — pure text block</li>
+                    <li><code>LAYOUT: Cards 3col</code> — card grid (number of columns)</li>
+                    <li><code>LAYOUT: Gallery 4/3</code> — gallery (can specify ratio immediately)</li>
+                    <li><code>LAYOUT: FAQ accordion|static</code></li>
+                    <li><code>LAYOUT: Banner [split] [left|center|right]</code> — hero/banner, split separates text/buttons</li>
+                    <li><code>LAYOUT: Zigzag</code> — "checkerboard" (row: image ↔ text)</li>
+                </ul>
+
+                <h2>General Parameters (for section)</h2>
+                <ul>
+                    <li><strong>Section H2 title:</strong> <code>TITLE: Text</code> (or <code>TITLE: -</code> to hide)</li>
+                    <li><strong>Text/inner blocks alignment:</strong> <code>ALIGN: left|center|right</code></li>
+                    <li><strong>Colors:</strong>
+                        <ul>
+                            <li><code>COLOR: #333</code> — quickly color both headings and text</li>
+                            <li><code>TITLE COLOR: #000</code></li>
+                            <li><code>TEXT COLOR: #555</code></li>
+                            <li><strong>Links:</strong>
+                                <ul>
+                                    <li><code>LINK COLOR: #06f</code></li>
+                                    <li><code>LINK WEIGHT: 600|bold|…</code></li>
+                                    <li><code>LINK UNDERLINE: on|off|hover</code></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><strong>Buttons:</strong>
+                        <ul>
+                            <li><strong>Border/color:</strong> <code>BTN COLOR: #111</code></li>
+                            <li><strong>Background:</strong> <code>BTN BG: #111 | linear-gradient(...)</code></li>
+                            <li><strong>Radius:</strong> <code>BTN RADIUS: 8 | pill | 50%</code></li>
+                            <li><strong>Border:</strong> <code>BORDER BTN: 2px solid #111</code></li>
+                        </ul>
+                    </li>
+                    <li><strong>Section/container backgrounds:</strong>
+                        <ul>
+                            <li><strong>Section:</strong> <code>BG: #f7f7f7 | url(...) | linear-gradient(...)</code> or more precisely: <code>BG SECTION: …</code></li>
+                            <li><strong>Container:</strong> <code>BG CONTAINER: #fff | url(...) | linear-gradient(...)</code></li>
+                            <li><strong>Overlays:</strong>
+                                <ul>
+                                    <li><code>OVERLAY: 0.35 | rgba(...) | off</code> (for section)</li>
+                                    <li><code>OVERLAY CONTAINER: 0.2 | rgba(...) | off</code></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><strong>Radius:</strong>
+                        <ul>
+                            <li><strong>Section:</strong> <code>RADIUS: 12</code> or <code>RADIUS SECTION: 12 12 0 0</code></li>
+                            <li><strong>Container:</strong> <code>RADIUS CONTAINER: 12</code></li>
+                            <li><strong>Image:</strong> <code>IMG RADIUS: 12 | 50%</code></li>
+                            <li><strong>Card:</strong> <code>CARD RADIUS: 12</code></li>
+                        </ul>
+                    </li>
+                    <li><strong>Borders:</strong>
+                        <ul>
+                            <li><code>BORDER SECTION: 1px solid #ddd</code></li>
+                            <li><code>BORDER CONTAINER: 1px dashed #ccc</code></li>
+                            <li><code>BORDER CARD: 1px solid #eee</code></li>
+                        </ul>
+                    </li>
+                    <li><strong>Shadows:</strong>
+                        <ul>
+                            <li><code>CARD SHADOW: none|soft|medium|hard</code> or custom box-shadow</li>
+                            <li><code>CARD SHADOW HOVER: soft|…</code> or custom box-shadow</li>
+                        </ul>
+                    </li>
+                    <li><strong>Sizes/widths:</strong>
+                        <ul>
+                            <li><code>SECTION WIDTH: 1200px | 92%</code></li>
+                            <li><code>CONTAINER WIDTH: 1200px | 92%</code> (inside section — locally)</li>
+                            <li><code>HERO WIDTH: 900px</code> (for banner)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Spacing (section):</strong>
+                        <ul>
+                            <li><strong>Short:</strong> <code>MARGIN: 40 0</code> and/or <code>PADDING: 48 16</code> (4-value CSS shorthand; MARGIN allows auto)</li>
+                            <li><strong>Specific:</strong> <code>MARGIN TOP: 40</code> / <code>MARGIN BOTTOM: 32</code></li>
+                            <li><strong>Container variants:</strong>
+                                <ul>
+                                    <li><code>MARGIN CONTAINER: 0 auto</code></li>
+                                    <li><code>PADDING CONTAINER: 24 16</code></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><strong>Container overflow:</strong> <code>OVERFLOW CONTAINER: visible|clip|hidden|auto|scroll</code></li>
+                    <li><strong>Container alignment:</strong> <code>CONTAINER ALIGN: left|center|right</code> (sets margin — 0, 0 auto, 0 0 0 auto)</li>
+                    <li><strong>Top/bottom descriptions inside container:</strong>
+                        <ul>
+                            <li><code>DESC TOP: Text (can include links)</code></li>
+                            <li><code>DESC BOTTOM: Text</code></li>
+                            <li><strong>Description alignment:</strong>
+                                <ul>
+                                    <li><code>DESC TOP ALIGN: left|center|right</code></li>
+                                    <li><code>DESC BOTTOM ALIGN: left|center|right</code></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h2>Type-specific Settings</h2>
+
+                <h3>Media / Zigzag</h3>
+                <ul>
+                    <li><strong>Aspect ratio:</strong> <code>IMAGE SIZE (RATIO): 4/3</code></li>
+                    <li><strong>Columns (image/content):</strong> <code>COLS: 40/60</code> (in % or fractions: 1/2, 2 3)</li>
+                    <li><strong>Image caption:</strong> <code>CAP: …</code></li>
+                    <li><code>LAYOUT: Media stack</code> — image above text on all widths</li>
+                </ul>
+
+                <h3>Text / Text block</h3>
+                <ul>
+                    <li><strong>Text columns:</strong> <code>COLS: 2</code></li>
+                    <li><strong>Alignment:</strong> <code>ALIGN: left|center|right</code> (buttons follow alignment)</li>
+                </ul>
+
+                <h3>Cards</h3>
+                <ul>
+                    <li><strong>Number of columns:</strong> <code>COLS: 3</code></li>
+                    <li><strong>Width wrapping mode:</strong> <code>CARDS WRAP: center</code> — last row is centered</li>
+                    <li><strong>Fixed card width</strong> (for wrap mode): <code>CARD WIDTH: 340px</code></li>
+                    <li><strong>Card colors/background:</strong>
+                        <ul>
+                            <li><code>CARD COLOR: #222</code></li>
+                            <li><code>CARD TITLE COLOR: #000</code></li>
+                            <li><code>CARD BG: #fff | url(...) | linear-gradient(...)</code></li>
+                        </ul>
+                    </li>
+                    <li><strong>Card content alignment:</strong> <code>CARD ALIGN: left|center|right</code></li>
+                    <li><strong>Media ratio:</strong> globally for section — <code>IMAGE SIZE (RATIO): 4/5</code>, default: with IMG — 4/3, with ICON — 4/1</li>
+                </ul>
+
+                <h3>Gallery</h3>
+                <ul>
+                    <li><strong>Columns:</strong> <code>COLS: 3</code></li>
+                    <li><strong>Ratio:</strong> <code>IMAGE SIZE (RATIO): 3/2</code></li>
+                    <li><strong>Gap between cells:</strong> <code>GALLERY GAP: 12px</code></li>
+                </ul>
+
+                <h3>FAQ</h3>
+                <ul>
+                    <li><strong>Mode:</strong> <code>FAQ MODE: accordion|static</code></li>
+                    <li><strong>Icon:</strong> <code>FAQ ICON: ❓</code> (optional)</li>
+                    <li><strong>Item styling:</strong>
+                        <ul>
+                            <li><code>FAQ ITEM BG: #fff | url(...) | gradient(...)</code></li>
+                            <li><code>FAQ ITEM BORDER: 1px solid #eee</code></li>
+                            <li><code>FAQ ITEM SHADOW: 0 8px 24px rgba(0,0,0,.1)</code></li>
+                        </ul>
+                    </li>
+                    <li><strong>Q/A pairs:</strong>
+                        <ul>
+                            <li><code>Q: Question</code></li>
+                            <li><code>A: Answer</code></li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h3>Banner / Hero</h3>
+                <ul>
+                    <li><strong>Alignment:</strong> <code>ALIGN: left|center|right</code></li>
+                    <li><strong>Vertical:</strong> <code>VALIGN: top|center|bottom</code></li>
+                    <li><strong>Heading level:</strong> <code>HEADING: H1|H2</code></li>
+                    <li><strong>Minimum height:</strong> <code>MIN HEIGHT: 420</code></li>
+                    <li><strong>Maximum text width:</strong> <code>HERO WIDTH: 900px</code></li>
+                    <li><strong>Column separation</strong> (text / CTA): <code>LAYOUT: Banner split</code></li>
+                </ul>
+
+                <h2>SEO (preview and &lt;head&gt; tags)</h2>
+                <ul>
+                    <li><code>SEO TITLE: Page title</code></li>
+                    <li><code>SEO DESC: Short description (can include links)</code></li>
+                    <li><code>KEYWORDS: keyword1, keyword2, keyword3</code></li>
+                </ul>
+
+                <h2>Global (for entire canvas)</h2>
+                <ul>
+                    <li><code>GLOBAL: CONTAINER WIDTH 1200 | 92%</code></li>
+                    <li><code>GLOBAL: SECTION WIDTH 1400</code></li>
+                </ul>
+
+                <h2>Quick Mini-examples</h2>
+
+                <h3>1) Media right, 40/60, button, caption</h3>
+                <pre>/* start */
+LAYOUT: Media right
+TITLE: Our Product
+IMAGE SIZE (RATIO): 16/9
+COLS: 40/60
+IMG: https://…/photo.jpg | Alt
+CAP: Interface screenshot
+H3 Features
+— List…
+BTN: Learn more | https://…
+/* end */</pre>
+
+                <h3>2) Text, 2 columns, center</h3>
+                <pre>/* start */
+LAYOUT: Text block center
+TITLE: About Company
+LEAD: Short lead.
+COLS: 2
+Couple of regular text paragraphs…
+BTN: Contact us | https://…
+/* end */</pre>
+
+                <h3>3) Cards with wrap and fixed width</h3>
+                <pre>/* start */
+LAYOUT: Cards 3col
+TITLE: Pricing Plans
+CARDS WRAP: center
+CARD WIDTH: 360px
+IMAGE SIZE (RATIO): 4/5
+ICON: 💡 | Starter | For beginners… | Buy | https://…
+IMG: https://…/pro.jpg | Pro | For professionals… | Buy | https://…
+/* end */</pre>
+
+                <h3>4) Gallery with caption and gap</h3>
+                <pre>/* start */
+LAYOUT: Gallery 3/2
+TITLE: Portfolio
+GALLERY GAP: 12px
+IMG: https://…/1.jpg | alt | Caption 1
+IMG: https://…/2.jpg | alt | Caption 2
+/* end */</pre>
+
+                <h3>5) FAQ accordion</h3>
+                <pre>/* start */
+LAYOUT: FAQ accordion
+TITLE: Questions & Answers
+FAQ ICON: ❓
+Q: How to pay?
+A: By card or invoice.
+BTN: Support | https://…
+/* end */</pre>
+
+                <h2>Copying Tips</h2>
+                <p>In preview, each custom section has a panel:</p>
+                <ul>
+                    <li><strong>Copy HTML</strong> — <code>.bot-scope</code> wrapper + selected section</li>
+                    <li><strong>Copy CSS</strong> — only needed CSS pieces for that section</li>
+                    <li><strong>HTML + CSS</strong> — section HTML with inline <code>&lt;style&gt;</code> from "needed pieces"</li>
+                </ul>
+                <p>This is enough to insert sections one by one on external sites without extra code.</p>
+            `;
+        }
     </script>
+
+    <!-- Попап с шпаргалкой -->
+    <div class="popup-overlay" id="cheatsheetPopup">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h2 class="popup-title">📖 BeOnTop Directives Cheatsheet</h2>
+                <button class="popup-close" onclick="closeCheatsheet()">&times;</button>
+            </div>
+            <div class="popup-body" id="cheatsheetContent">
+                <!-- Контент будет добавлен через JavaScript -->
+            </div>
+        </div>
+    </div>
 </body>
 </html>
