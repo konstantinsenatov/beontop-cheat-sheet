@@ -1063,34 +1063,138 @@ CTA: [INSERT CTA BUTTON TEXT] | /contact
 
                 <div class="tab-content" id="galleries">
                     <h3>Galleries</h3>
-                    <div class="section" data-image="https://beontop.netlify.app/16x9-1600x900.jpg">
-                        <div class="section-media"></div>
+                    
+                    <div class="section">
+                        <div class="section-media">
+                            <img src="screenshots/galleries/1.jpg" alt="Gallery Classic Example">
+                        </div>
                         <div class="section-content">
-                        <h4>Our Works Zigzag</h4>
+                        <h4>Gallery Classic</h4>
                         <pre>/* start */
-LAYOUT: Zigzag
- 
-COLS: 40 60
+LAYOUT: Gallery
+TITLE: Our Work — Classic
+BG SECTION: #f5f5f5
+CONTAINER ALIGN: center
 IMAGE SIZE (RATIO): 4/3
-PADDING: 24 16
-MARGIN: 0 0 30 0
-DESC TOP: [INSERT TOP DESCRIPTION TEXT]
+GALLERY GAP: 16
 
-IMG: [INSERT FIRST IMAGE URL] | [INSERT FIRST IMAGE ALT]
-[INSERT FIRST HEADING HERE]
-[INSERT FIRST DESCRIPTION TEXT]
-BTN: [INSERT FIRST BUTTON TEXT] | [INSERT FIRST BUTTON URL]
+DESC TOP: [TOP DESC] 
+DESC TOP ALIGN: center
 
-IMG: [INSERT SECOND IMAGE URL] | [INSERT SECOND IMAGE ALT]
-[INSERT SECOND HEADING HERE]
-[INSERT SECOND DESCRIPTION TEXT]
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | BMW M3 
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | Audi Q7 
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | Tesla 3 
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | Porsche 911 
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | Range Rover 
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | VW Golf
 
-IMG: [INSERT THIRD IMAGE URL] | [INSERT THIRD IMAGE ALT]
-[INSERT THIRD HEADING HERE]
-[INSERT THIRD DESCRIPTION TEXT]
-
+BTN BORDER: 1px solid #FFFFFF
 CTA: [INSERT CTA BUTTON TEXT] | [INSERT CTA BUTTON URL]
-DESC BOTTOM: [INSERT BOTTOM DESCRIPTION TEXT]
+/* end */</pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-media">
+                            <img src="screenshots/galleries/2.jpg" alt="Gallery Classic with Descriptions Example">
+                        </div>
+                        <div class="section-content">
+                        <h4>Gallery Classic with Descriptions</h4>
+                        <pre>/* start */
+LAYOUT: Gallery
+TITLE: Our Work — Classic
+CONTAINER WIDTH: 1100 | 94%
+CONTAINER ALIGN: center
+IMAGE SIZE (RATIO): 4/3
+GALLERY GAP: 16
+
+DESC TOP: [TOP DESC] 
+DESC TOP ALIGN: center
+
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | BMW M3 | Full detailing wash
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | Audi Q7 | Interior deep cleaning
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | Tesla 3 | Paint correction
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | Porsche 911 | Ceramic coating
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | Range Rover | Paint protection film
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | VW Golf | Engine bay detailing
+
+BTN BG: #f5f5f5 
+CTA: [INSERT CTA BUTTON TEXT] | [INSERT CTA BUTTON URL]
+/* end */</pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-media">
+                            <img src="screenshots/galleries/3.jpg" alt="Square Grid Example">
+                        </div>
+                        <div class="section-content">
+                        <h4>Square Grid 1:1</h4>
+                        <pre>/* start */
+LAYOUT: Gallery
+TITLE: Square Grid 1:1
+CONTAINER WIDTH: 1200 | 96%
+CONTAINER ALIGN: center
+IMAGE SIZE (RATIO): 1/1
+GALLERY GAP: 8
+
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | | 
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | | 
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | | 
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | | 
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | | 
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | | 
+/* end */</pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-media">
+                            <img src="screenshots/galleries/4.jpg" alt="Wide-format Gallery Example">
+                        </div>
+                        <div class="section-content">
+                        <h4>Wide-format Gallery</h4>
+                        <pre>/* start */
+LAYOUT: Gallery
+TITLE: Wide-format Gallery
+CONTAINER WIDTH: 1000 | 92%
+CONTAINER ALIGN: center
+IMAGE SIZE (RATIO): 16/9
+GALLERY GAP: 20
+
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | Studio shoot | Soft lighting
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | Outdoor | Natural lighting
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | Macro | Coating texture
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | Process | Polishing stage
+
+BTN BORDER: 1px solid #FFFFFF
+CTA: All projects | /cases
+
+DESC BOTTOM: [BOTTOM DESC] 
+DESC BOTTOM ALIGN: center
+/* end */</pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-media">
+                            <img src="screenshots/galleries/5.jpg" alt="Quick Preview Example">
+                        </div>
+                        <div class="section-content">
+                        <h4>Quick Preview</h4>
+                        <pre>/* start */
+LAYOUT: Gallery 5col
+TITLE: Quick Preview
+IMAGE SIZE (RATIO): 9/16
+GALLERY GAP: 5
+
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | | 
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | | 
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | | 
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | | 
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | | 
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | | 
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | | 
 /* end */</pre>
                         </div>
                     </div>
