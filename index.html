@@ -359,7 +359,7 @@
                 <div class="tabs-nav">
                     <button class="tab-button active" data-tab="banners">Banners</button>
                     <button class="tab-button" data-tab="textblocks">TextBlocks (and Media)</button>
-                    <button class="tab-button" data-tab="benefits">Benefits</button>
+                    <button class="tab-button" data-tab="benefits">Cards (columns)</button>
                     <button class="tab-button" data-tab="faqs">FAQs</button>
                     <button class="tab-button" data-tab="galleries">Galleries</button>
                     <button class="tab-button" data-tab="testimonials">Testimonials</button>
@@ -374,7 +374,6 @@
                 <div class="tab-content active" id="banners">
                     <h3>Banners</h3>
 
-
                     <div class="section">
                         <div class="section-media">
                             <img src="screenshots/banners/1.jpg" alt="Banner Left Split Example">
@@ -385,10 +384,10 @@
 LAYOUT: Banner left split
 ALIGN: left
 VALIGN: center
-MIN HEIGHT: 320
+MIN HEIGHT: 450
 CONTAINER ALIGN: center
-BG: [INSERT BACKGROUND IMAGE URL]
-OVERLAY: 0.45
+BG: https://beontop.netlify.app/16x9-1600x900.jpg
+OVERLAY: 0.3
 TITLE COLOR: #FFFFFF
 TEXT COLOR: #FFFFFF
 RADIUS SECTION: 20
@@ -411,57 +410,14 @@ BTN BORDER: 1px solid #FFFFFF
 [INSERT DESCRIPTION TEXT HERE]
 
 CTA: [BUTTON_TEXT] | [BUTTON_URL]
-BTN: [SECONDARY_BUTTON_TEXT] | [SECONDARY_BUTTON_URL]
+BTN: [SECONDARY BUTTON TEXT] | [SECONDARY BUTTON URL]
 /* end */</pre>
                         </div>
                     </div>
 
                     <div class="section">
                         <div class="section-media">
-                            <img src="screenshots/banners/2.jpg" alt="Banner Center Split Example">
-                        </div>
-                        <div class="section-content">
-                        <h4>Banner Center Split</h4>
-                        <pre>/* start */
-LAYOUT: Banner center split
-ALIGN: center
-VALIGN: center
-MIN HEIGHT: 300
-HERO WIDTH: 900
-CONTAINER WIDTH: 1100 | 88%
-CONTAINER ALIGN: center
-BG: [INSERT BACKGROUND COLOR OR IMAGE]
-OVERLAY: off
-TITLE COLOR: #0F172A
-TEXT COLOR: #0F172A
-RADIUS SECTION: 0
-PADDING SECTION: 0
-BORDER SECTION: 1px solid #E5E7EB
-BG CONTAINER: linear-gradient(180deg, rgba(255,192,0,0.07), rgba(0,0,0,0))
-OVERLAY CONTAINER: none
-RADIUS CONTAINER: 24
-PADDING CONTAINER: 28 28
-BORDER CONTAINER: 1px solid rgba(255,192,0,0.07)
-LINK COLOR: #000000
-LINK WEIGHT: 600
-LINK UNDERLINE: off
-BTN COLOR: #000000
-BTN BG: #ffffff
-BTN RADIUS: 10
-BTN BORDER: 1px solid #000000
-
-[INSERT MAIN HEADING HERE]
-[INSERT DESCRIPTION TEXT HERE]
-[INSERT ADDITIONAL TEXT HERE]
-
-BTN: [BUTTON_TEXT] | [BUTTON_URL]
-/* end */</pre>
-                        </div>
-                    </div>
-
-                    <div class="section">
-                        <div class="section-media">
-                            <img src="screenshots/banners/3.jpg" alt="Banner Right Example">
+                            <img src="screenshots/banners/2.jpg" alt="Banner Right Example">
                         </div>
                         <div class="section-content">
                         <h4>Banner Right</h4>
@@ -474,7 +430,7 @@ MIN HEIGHT: 420
 HERO WIDTH: 1000
 CONTAINER WIDTH: 1100 | 92%
 CONTAINER ALIGN: center
-BG: [INSERT BACKGROUND IMAGE URL]
+BG: https://beontop.netlify.app/16x9-1600x900.jpg
 OVERLAY: linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.75))
 TITLE COLOR: #FFFFFF
 TEXT COLOR: #E8F0FE
@@ -506,12 +462,94 @@ BTN: [SECONDARY_BUTTON_TEXT] | [SECONDARY_BUTTON_URL]
 
                     <div class="section">
                         <div class="section-media">
-                            <img src="screenshots/banners/4.jpg" alt="Banner Left Example">
+                            <img src="screenshots/banners/3.jpg" alt="Banner Center Split Example">
                         </div>
                         <div class="section-content">
-                        <h4>Banner Left</h4>
+                        <h4>Banner Center Split</h4>
                         <pre>/* start */
-LAYOUT: Banner left
+LAYOUT: Banner center split
+ALIGN: center
+VALIGN: center
+MIN HEIGHT: 300
+HERO WIDTH: 900
+CONTAINER WIDTH: 1100 | 88%
+CONTAINER ALIGN: center
+BG: https://beontop.netlify.app/16x9-1600x900.jpg
+OVERLAY: off
+TITLE COLOR: #0F172A
+TEXT COLOR: #0F172A
+RADIUS SECTION: 0
+BG CONTAINER: #f5f5f5
+OVERLAY CONTAINER: none
+RADIUS CONTAINER: 24
+PADDING CONTAINER: 28 28
+BORDER CONTAINER: 1px solid rgba(255,192,0,0.07)
+LINK COLOR: #000000
+LINK WEIGHT: 600
+LINK UNDERLINE: off
+BTN COLOR: #000000
+BTN BG: #ffffff
+BTN RADIUS: 10
+BTN BORDER: 1px solid #000000
+
+[INSERT MAIN HEADING HERE]
+[INSERT DESCRIPTION TEXT HERE]
+[INSERT ADDITIONAL TEXT HERE]
+
+BTN: [BUTTON_TEXT] | [BUTTON_URL]
+/* end */</pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-media">
+                            <img src="screenshots/banners/4.jpg" alt="Banner Center Example">
+                        </div>
+                        <div class="section-content">
+                        <h4>Banner Center</h4>
+                        <pre>/* start */
+LAYOUT: Banner center
+ALIGN: center
+VALIGN: center
+MIN HEIGHT: 300
+HERO WIDTH: 900
+CONTAINER WIDTH: 1100 | 88%
+CONTAINER ALIGN: center
+OVERLAY: off
+TITLE COLOR: #0F172A
+TEXT COLOR: #0F172A
+RADIUS SECTION: 0
+BORDER SECTION: none
+BG CONTAINER: #f5f5f5
+OVERLAY CONTAINER: none
+RADIUS CONTAINER: 24
+PADDING CONTAINER: 28 28
+BORDER CONTAINER: 1px solid rgba(255,192,0,0.07)
+LINK COLOR: #000000
+LINK WEIGHT: 600
+LINK UNDERLINE: off
+BTN COLOR: #000000
+BTN BG: #ffffff
+BTN RADIUS: 10
+BTN BORDER: 1px solid #000000
+
+[INSERT MAIN HEADING HERE]
+[INSERT DESCRIPTION TEXT HERE]
+[INSERT ADDITIONAL TEXT HERE]
+
+BTN: [BUTTON_TEXT] | [BUTTON_URL]
+/* end */</pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-media">
+                            <img src="screenshots/banners/5.jpg" alt="Banner Center with Image Example">
+                        </div>
+                        <div class="section-content">
+                        <h4>Banner Center with Image</h4>
+                        <pre>/* start */
+LAYOUT: Banner center
 ALIGN: center
 VALIGN: center
  
@@ -525,17 +563,20 @@ TITLE COLOR: #0F172A
 TEXT COLOR: #0F172A
 RADIUS SECTION: 12
 PADDING SECTION: 36 20
-BORDER SECTION: 1px solid #EEEEEE
+BORDER SECTION: none
 BG CONTAINER: url('[INSERT CONTAINER BACKGROUND IMAGE]')
 OVERLAY CONTAINER: rgba(0,0,0,0)
 RADIUS CONTAINER: 12
 PADDING CONTAINER: 32 32
-BORDER CONTAINER: 1px solid rgba(0,0,0,0.08)
+BORDER CONTAINER: none
+BG: https://beontop.netlify.app/16x9-1600x900.jpg
+OVERLAY: 0.3
+COLOR: #ffffff
 LINK COLOR: #0F172A
 LINK WEIGHT: 500
 LINK UNDERLINE: hover
-BTN COLOR: #FFFFFF
-BTN BG: linear-gradient(90deg, #2563EB, #7C3AED)
+BTN COLOR: #000000
+BTN BG: #f5f5f5
 BTN RADIUS: 14
 BTN BORDER: none
 
@@ -727,33 +768,225 @@ ROW BG:
                 </div>
 
                 <div class="tab-content" id="benefits">
-                    <h3>Benefits</h3>
-                    <div class="section" data-image="https://beontop.netlify.app/16x9-1600x900.jpg">
-                        <div class="section-media"></div>
+                    <h3>Cards (columns)</h3>
+                    
+                    <div class="section">
+                        <div class="section-media">
+                            <img src="screenshots/cards-columns/1.jpg" alt="Cards 3col Example">
+                        </div>
                         <div class="section-content">
-                        <h4>Our Services</h4>
+                        <h4>Cards 3col</h4>
                         <pre>/* start */
-LAYOUT: Media left
- 
- 
-COLS: 40 60
-IMG: [INSERT IMAGE URL] | [INSERT IMAGE ALT TEXT]
-DESC TOP: [INSERT TOP DESCRIPTION TEXT]
-DESC TOP ALIGN: left
+LAYOUT: Cards 3col
+TITLE: [TITLE]
+HEADING: H2
+COLS: 3
+IMAGE SIZE (RATIO): 5/3
+CARD BG: #eee
+BORDER CARD: none
+CARD RADIUS: 10
+BTN BORDER: 1px solid #000000
+DESC TOP: [TOP DESC]
+DESC TOP ALIGN: center
 
-[INSERT MAIN HEADING HERE]
-[INSERT FIRST SERVICE DESCRIPTION]
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | [TITLE1] | [DESC1] | [BTN TEXT1] | [URL1]
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | [TITLE2] | [DESC2] | [BTN TEXT2] | [URL2]
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | [TITLE3] | [DESC3] | [BTN TEXT3] | [URL3]
 
-[INSERT SECOND HEADING HERE]
-[INSERT SECOND SERVICE DESCRIPTION]
+DESC BOTTOM: [BOTTOM DESC]
+DESC BOTTOM ALIGN: center
+/* end */</pre>
+                        </div>
+                    </div>
 
-[INSERT THIRD HEADING HERE]
-[INSERT THIRD SERVICE DESCRIPTION]
+                    <div class="section">
+                        <div class="section-media">
+                            <img src="screenshots/cards-columns/2.jpg" alt="Cards 4col Example">
+                        </div>
+                        <div class="section-content">
+                        <h4>Cards 4col</h4>
+                        <pre>/* start */
+LAYOUT: Cards 4col 4/3
+TITLE: [TITLE]
+HEADING: H2
+COLS: 4
+CARD ALIGN: center
+BG CONTAINER: #f5f5f5
+PADDING CONTAINER: 30 15
+CONTAINER WIDTH: 1200 | 92%
+CONTAINER ALIGN: center
+CARDS WRAP: center
+CARD BG: linear-gradient(180deg, #fff, #f8f8f8)
+CARD TITLE COLOR: #111111
+CARD BG: #ffffff
+BORDER CARD: none
+CARD RADIUS: 8
+DESC TOP: [TOP DESC]
+DESC TOP ALIGN: center
+BTN BG: #f5f5f5
 
-DESC BOTTOM: [INSERT BOTTOM DESCRIPTION TEXT]
-DESC BOTTOM ALIGN: left
-BTN: [BUTTON_TEXT] | [BUTTON_URL]
-CTA: [SECONDARY_BUTTON_TEXT] | [SECONDARY_BUTTON_URL]
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | [TITLE1] | [DESC1] | [BTN TEXT1] | [URL1]
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | [TITLE2] | [DESC2] | [BTN TEXT2] | [URL2]
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | [TITLE3] | [DESC3] | [BTN TEXT3] | [URL3]
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | [TITLE4] | [DESC4] | [BTN TEXT4] | [URL4]
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | [TITLE5] | [DESC5] | [BTN TEXT5] | [URL5]
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | [TITLE6] | [DESC6] | [BTN TEXT6] | [URL6]
+
+DESC BOTTOM: [BOTTOM DESC]
+DESC BOTTOM ALIGN: center
+/* end */</pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-media">
+                            <img src="screenshots/cards-columns/3.jpg" alt="Cards 3col Icons Example">
+                        </div>
+                        <div class="section-content">
+                        <h4>Cards 3col Icons</h4>
+                        <pre>/* start */
+LAYOUT: Cards 3col
+CONTAINER WIDTH: 1200 | 92%
+CONTAINER ALIGN: center
+CARDS WRAP: center
+CARD WIDTH: 340px  
+CARD SHADOW: 0 10px 32px rgba(0,0,0,.12)
+TITLE: [TITLE]
+HEADING: H2
+
+ICON: 🚗 | [TITLE1] | [DESC1]
+ICON: 🧽 | [TITLE2] | [DESC2]
+ICON: ✨ | [TITLE3] | [DESC3]
+ICON: 🛡️ | [TITLE4] | [DESC4]
+ICON: 🪟 | [TITLE5] | [DESC5]
+/* end */</pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-media">
+                            <img src="screenshots/cards-columns/4.jpg" alt="Cards 3col Steps Example">
+                        </div>
+                        <div class="section-content">
+                        <h4>Cards 3col Steps</h4>
+                        <pre>/* start */
+LAYOUT: Cards 3col
+TITLE: [TITLE]
+HEADING: H2
+COLS: 3
+CARD BG: #ffffff
+CARD RADIUS: 12
+CARD SHADOW: 0 10px 32px rgba(0,0,0,.12)
+BORDER CARD: none
+CARD TITLE COLOR: #111111
+CARD COLOR: #555555
+DESC TOP: [TOP DESC]
+DESC TOP ALIGN: center
+BTN BG: #f5f5f5
+
+ICON: STEP 1 | [TITLE1] | [DESC1] | [BTN TEXT1] | [URL1]
+ICON: STEP 2 | [TITLE2] | [DESC2] | [BTN TEXT2] | [URL2]
+ICON: STEP 3 | [TITLE3] | [DESC3] | [BTN TEXT3] | [URL3]
+
+DESC BOTTOM: [BOTTOM DESC]
+DESC BOTTOM ALIGN: center
+/* end */</pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-media">
+                            <img src="screenshots/cards-columns/5.jpg" alt="Cards 4col Packages Example">
+                        </div>
+                        <div class="section-content">
+                        <h4>Cards 4col Packages</h4>
+                        <pre>/* start */
+LAYOUT: Cards 3col 
+IMAGE SIZE (RATIO): 4/3
+TITLE: [TITLE]
+HEADING: H2
+CARDS WRAP: center
+COLS: 5
+CARD BG: #fff
+CARD RADIUS: 10
+BORDER CARD: none
+CARD TITLE COLOR: #0f172a
+CARD COLOR: #475569
+DESC TOP: [TOP DESC]
+DESC TOP ALIGN: center
+
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | [TITLE1] | [DESC1] | [BTN TEXT1] | [URL1]
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | [TITLE2] | [DESC2] | [BTN TEXT2] | [URL2]
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | [TITLE3] | [DESC3] | [BTN TEXT3] | [URL3]
+IMG: https://beontop.netlify.app/16x9-1600x900.jpg | [TITLE4] | [DESC4] | [BTN TEXT4] | [URL4]
+
+DESC BOTTOM: [BOTTOM DESC]
+DESC BOTTOM ALIGN: center
+/* end */</pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-media">
+                            <img src="screenshots/cards-columns/6.jpg" alt="Cards Testimonials Example">
+                        </div>
+                        <div class="section-content">
+                        <h4>Cards Testimonials</h4>
+                        <pre>/* start */
+LAYOUT: Cards 3col
+TITLE: [TITLE]
+IMAGE SIZE (RATIO): 5/1
+CARDS WRAP: center
+CARD RADIUS: 12
+BORDER CARD: none
+CARD SHADOW: soft
+CARD ALIGN: left
+CARD TITLE COLOR: #111111
+CARD COLOR: #555555
+DESC TOP: [TOP DESC]
+
+ICON: ⭐️⭐️⭐️⭐️☆ | [NAME1] | "[TESTIMONIAL1]"
+
+ICON: ⭐️⭐️⭐️⭐️⭐️ | [NAME2] | "[TESTIMONIAL2]"
+
+ICON: ⭐️⭐️⭐️⭐️⭐️| [NAME3] | "[TESTIMONIAL3]"
+/* end */</pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-media">
+                            <img src="screenshots/cards-columns/7.jpg" alt="Cards Reviews Extended Example">
+                        </div>
+                        <div class="section-content">
+                        <h4>Cards Reviews Extended</h4>
+                        <pre>/* start */
+LAYOUT: Cards 3col
+TITLE: [TITLE]
+IMAGE SIZE (RATIO): 5/1
+BG SECTION: #f5f5f5
+CONTAINER WIDTH: 1200 | 92%
+CONTAINER ALIGN: center
+CARDS WRAP: center
+CARD WIDTH: 340px 
+CARDS WRAP: center
+CARD RADIUS: 12
+BORDER CARD: none
+CARD SHADOW: soft
+CARD ALIGN: left
+CARD TITLE COLOR: #111111
+CARD COLOR: #555555
+DESC TOP: [TOP DESC]
+
+ICON: ⭐️⭐️⭐️⭐️☆ | [NAME1] | "[TESTIMONIAL1]"
+
+ICON: ⭐️⭐️⭐️⭐️⭐️ | [NAME2] | "[TESTIMONIAL2]"
+
+ICON: ⭐️⭐️⭐️⭐️⭐️| [NAME3] | "[TESTIMONIAL3]"
+
+ICON: ⭐️⭐️⭐️⭐️⭐️| [NAME4] | "[TESTIMONIAL4]"
+
+ICON: ⭐️⭐️⭐️⭐️⭐️| [NAME5] | "[TESTIMONIAL5]"
 /* end */</pre>
                         </div>
                     </div>
@@ -761,8 +994,10 @@ CTA: [SECONDARY_BUTTON_TEXT] | [SECONDARY_BUTTON_URL]
 
                 <div class="tab-content" id="faqs">
                     <h3>FAQs</h3>
-                    <div class="section" data-image="https://beontop.netlify.app/16x9-1600x900.jpg">
-                        <div class="section-media"></div>
+                    <div class="section">
+                        <div class="section-media">
+                            <img src="screenshots/faqs/1.jpg" alt="FAQ Example">
+                        </div>
                         <div class="section-content">
                         <h4>Questions & Answers</h4>
                         <pre>/* start */
