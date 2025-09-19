@@ -359,11 +359,11 @@
             <div class="tabs-container">
                 <div class="tabs-nav">
                     <button class="tab-button active" data-tab="banners">Banners</button>
+                    <button class="tab-button" data-tab="textblocks">Media with text</button>
                     <button class="tab-button" data-tab="benefits">Benefits</button>
                     <button class="tab-button" data-tab="faqs">FAQs</button>
                     <button class="tab-button" data-tab="galleries">Galleries</button>
                     <button class="tab-button" data-tab="testimonials">Testimonials</button>
-                    <button class="tab-button" data-tab="textblocks">TextBlocks</button>
                     <button class="help-button" onclick="openCheatsheet()">📖 Cheatsheet</button>
                 </div>
             </div>
@@ -550,6 +550,138 @@ BTN: [BUTTON_TEXT] | [BUTTON_URL]
                     </div>
                 </div>
 
+                <div class="tab-content" id="textblocks">
+                    <h3>Media with text</h3>
+                    
+                    <div class="section">
+                        <div class="section-media">
+                            <img src="screenshots/banners/1.jpg" alt="Media Left Example">
+                        </div>
+                        <div class="section-content">
+                        <h4>Media Left</h4>
+                        <pre>/* start */
+LAYOUT: Media left
+TITLE: [INSERT SECTION TITLE HERE]
+HEADING: H2
+COLS: 40 60
+IMG: [INSERT IMAGE URL] | [INSERT IMAGE ALT TEXT]
+DESC TOP: [INSERT TOP DESCRIPTION TEXT]
+DESC TOP ALIGN: left
+
+H3 [INSERT FIRST HEADING HERE]
+[INSERT FIRST PARAGRAPH TEXT HERE]
+
+H3 [INSERT SECOND HEADING HERE]
+[INSERT SECOND PARAGRAPH TEXT HERE]
+
+H3 [INSERT THIRD HEADING HERE]
+— [INSERT FIRST LIST ITEM]
+— [INSERT SECOND LIST ITEM]
+— [INSERT THIRD LIST ITEM]
+
+DESC BOTTOM: [INSERT BOTTOM DESCRIPTION TEXT]
+DESC BOTTOM ALIGN: left
+BTN: [INSERT BUTTON TEXT] | [INSERT BUTTON URL]
+CTA: [INSERT SECONDARY BUTTON TEXT] | [INSERT SECONDARY BUTTON URL]
+/* end */</pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-media">
+                            <img src="screenshots/banners/2.jpg" alt="Media Right Example">
+                        </div>
+                        <div class="section-content">
+                        <h4>Media Right</h4>
+                        <pre>/* start */
+LAYOUT: Media right
+TITLE: [INSERT SECTION TITLE HERE]
+HEADING: H2
+COLS: 50 50
+IMAGE SIZE (RATIO): 5/2
+IMG: [INSERT IMAGE URL] | [INSERT IMAGE ALT TEXT]
+DESC TOP: [INSERT TOP DESCRIPTION TEXT]
+DESC TOP ALIGN: center
+
+H3 [INSERT MAIN HEADING HERE]
+[INSERT PARAGRAPH TEXT HERE]
+
+H3 [INSERT SECOND HEADING HERE]
+— [INSERT FIRST LIST ITEM]
+— [INSERT SECOND LIST ITEM]
+— [INSERT THIRD LIST ITEM]
+
+DESC BOTTOM: [INSERT BOTTOM DESCRIPTION TEXT]
+DESC BOTTOM ALIGN: center
+BTN: [INSERT BUTTON TEXT] | [INSERT BUTTON URL]
+CTA: [INSERT SECONDARY BUTTON TEXT] | [INSERT SECONDARY BUTTON URL]
+/* end */</pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-media">
+                            <img src="screenshots/banners/3.jpg" alt="Media Stack Example">
+                        </div>
+                        <div class="section-content">
+                        <h4>Media Stack</h4>
+                        <pre>/* start */
+LAYOUT: Media stack
+IMAGE SIZE (RATIO): 16/9
+TITLE: [INSERT SECTION TITLE HERE]
+CAP: [INSERT IMAGE CAPTION]
+PADDING SECTION: 40 20
+CONTAINER WIDTH: 1100 | 92%
+CONTAINER ALIGN: center
+IMG: [INSERT IMAGE URL] | [INSERT IMAGE ALT TEXT]
+
+H3 [INSERT MAIN HEADING HERE]
+[INSERT PARAGRAPH TEXT HERE]
+
+H3 [INSERT SECOND HEADING HERE]
+— [INSERT FIRST LIST ITEM]
+— [INSERT SECOND LIST ITEM]
+— [INSERT THIRD LIST ITEM]
+
+BTN: [INSERT BUTTON TEXT] | [INSERT BUTTON URL]
+CTA: [INSERT CTA BUTTON TEXT] | [INSERT CTA BUTTON URL]
+/* end */</pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-media">
+                            <img src="screenshots/banners/4.jpg" alt="Media Stack Wide Example">
+                        </div>
+                        <div class="section-content">
+                        <h4>Media Stack Wide</h4>
+                        <pre>/* start */
+LAYOUT: Media stack
+IMAGE SIZE (RATIO): 5/2
+TITLE: [INSERT SECTION TITLE HERE]
+DESC TOP: [INSERT TOP DESCRIPTION TEXT]
+BG: [INSERT BACKGROUND COLOR OR IMAGE]
+CONTAINER WIDTH: 1100 | 90%
+CONTAINER ALIGN: center
+PADDING CONTAINER: 24 24
+BORDER CONTAINER: 1px solid rgba(0,0,0,0.08)
+RADIUS CONTAINER: 16
+IMG: [INSERT IMAGE URL] | [INSERT IMAGE ALT TEXT]
+
+H3 [INSERT MAIN HEADING HERE]
+[INSERT PARAGRAPH TEXT HERE]
+
+H3 [INSERT SECOND HEADING HERE]
+— [INSERT FIRST LIST ITEM]
+— [INSERT SECOND LIST ITEM]
+— [INSERT THIRD LIST ITEM]
+
+BTN: [INSERT BUTTON TEXT] | [INSERT BUTTON URL]
+/* end */</pre>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="tab-content" id="benefits">
                     <h3>Benefits</h3>
                     <div class="section" data-image="https://beontop.netlify.app/16x9-1600x900.jpg">
@@ -675,33 +807,6 @@ IMG: [INSERT THIRD IMAGE URL] | [INSERT THIRD RATING] [INSERT THIRD CLIENT NAME]
                     </div>
                 </div>
 
-                <div class="tab-content" id="textblocks">
-                    <h3>TextBlocks</h3>
-                    <div class="section" data-image="https://beontop.netlify.app/16x9-1600x900.jpg">
-                        <div class="section-media"></div>
-                        <div class="section-content">
-                        <h4>Text Block Example 1</h4>
-                        <pre>/* start */
-LAYOUT: Text block
-TITLE: [INSERT SECTION TITLE HERE]
- 
-ALIGN: center
-BG: [INSERT BACKGROUND COLOR OR IMAGE]
-PADDING: 40 20
-MARGIN: 20 0
-RADIUS: 12
-BORDER: 1px solid #e9ecef
-TITLE COLOR: #333333
-TEXT COLOR: #666666
-
-[INSERT MAIN DESCRIPTION TEXT HERE]
-
-BTN: [INSERT BUTTON TEXT] | [INSERT BUTTON URL]
-CTA: [INSERT CTA BUTTON TEXT] | [INSERT CTA BUTTON URL]
-/* end */</pre>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
