@@ -926,6 +926,179 @@ DESC BOTTOM ALIGN: center
                         </div>
                     </div>
 
+                </div>
+
+                <div class="tab-content" id="faqs">
+                    <h3>FAQs</h3>
+                    
+                    <div class="section">
+                        <div class="section-media">
+                            <img src="screenshots/faqs/1.jpg" alt="FAQ Static Example">
+                        </div>
+                        <div class="section-content">
+                        <h4>FAQ Static</h4>
+                        <pre>/* start */
+LAYOUT: FAQ
+TITLE: [TITLE]
+BG: #f5f5f5
+CONTAINER WIDTH: 1100
+CONTAINER ALIGN: center
+DESC TOP ALIGN: center
+DESC TOP: [TOP DESC]
+FAQ MODE: static
+FAQ ITEM BG: #ffffff
+CARD RADIUS: 10
+
+Q: FAQ Question
+A: FAQ Answer
+Q: FAQ Question
+A: FAQ Answer
+Q: FAQ Question
+A: FAQ Answer
+/* end */</pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-media">
+                            <img src="screenshots/faqs/2.jpg" alt="FAQ Accordion Example">
+                        </div>
+                        <div class="section-content">
+                        <h4>FAQ Accordion</h4>
+                        <pre>/* start */
+LAYOUT: FAQ
+TITLE: [TITLE]
+FAQ MODE: accordion
+FAQ ICON: ❓
+FAQ ITEM BG: #ffffff
+FAQ ITEM SHADOW: 0 8px 24px rgba(0,0,0,.06)
+FAQ ITEM BORDER: 1px solid #f1f5f9
+CARD RADIUS: 12
+DESC BOTTOM ALIGN: center
+DESC BOTTOM: [BOTTOM DESC]
+BTN BORDER: 1px solid #000000
+BTN RADIUS: 10
+
+Q: FAQ Question
+A: FAQ Answer
+Q: FAQ Question
+A: FAQ Answer
+Q: FAQ Question
+A: FAQ Answer
+
+CTA: [INSERT CTA BUTTON TEXT] | /contact
+/* end */</pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-media">
+                            <img src="screenshots/faqs/3.jpg" alt="FAQ Container Example">
+                        </div>
+                        <div class="section-content">
+                        <h4>FAQ Container</h4>
+                        <pre>/* start */
+LAYOUT: FAQ
+TITLE: [TITLE]
+CONTAINER WIDTH: 900
+CONTAINER ALIGN: center
+BG CONTAINER: #f5f5f5
+PADDING CONTAINER: 24 24
+FAQ MODE: static
+CARD RADIUS: 10
+FAQ ITEM BG: transparent
+FAQ ITEM BORDER: 1px solid #000000
+CARD RADIUS: 0
+DESC TOP ALIGN: center
+DESC TOP: [TOP DESC]
+
+Q: FAQ Question
+A: FAQ Answer
+Q: FAQ Question
+A: FAQ Answer
+Q: FAQ Question
+A: FAQ Answer
+/* end */</pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-media">
+                            <img src="screenshots/faqs/4.jpg" alt="FAQ Gradient Example">
+                        </div>
+                        <div class="section-content">
+                        <h4>FAQ Gradient</h4>
+                        <pre>/* start */
+LAYOUT: FAQ
+TITLE: [TITLE]
+BG SECTION: linear-gradient(135deg,#ffffff,#00000033)
+OVERLAY: rgba(0,0,0,.0)
+TITLE COLOR: #000000
+TEXT COLOR: #444444
+LINK COLOR: #000000
+FAQ MODE: accordion
+FAQ ICON: 💡
+FAQ ITEM BG: rgba(255,255,255,.08)
+FAQ ITEM BORDER: 1px solid rgba(255,255,255,.25)
+FAQ ITEM SHADOW: 0 10px 30px rgba(0,0,0,.15)
+CARD RADIUS: 14
+PADDING SECTION: 40 28
+DESC TOP ALIGN: center
+DESC TOP: [TOP DESC]
+BTN BORDER: 1px solid #000000
+BTN RADIUS: 10
+
+Q: FAQ Question
+A: FAQ Answer
+Q: FAQ Question
+A: FAQ Answer
+Q: FAQ Question
+A: FAQ Answer
+
+CTA: [INSERT CTA BUTTON TEXT] | /contact
+/* end */</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="galleries">
+                    <h3>Galleries</h3>
+                    <div class="section" data-image="https://beontop.netlify.app/16x9-1600x900.jpg">
+                        <div class="section-media"></div>
+                        <div class="section-content">
+                        <h4>Our Works Zigzag</h4>
+                        <pre>/* start */
+LAYOUT: Zigzag
+ 
+COLS: 40 60
+IMAGE SIZE (RATIO): 4/3
+PADDING: 24 16
+MARGIN: 0 0 30 0
+DESC TOP: [INSERT TOP DESCRIPTION TEXT]
+
+IMG: [INSERT FIRST IMAGE URL] | [INSERT FIRST IMAGE ALT]
+[INSERT FIRST HEADING HERE]
+[INSERT FIRST DESCRIPTION TEXT]
+BTN: [INSERT FIRST BUTTON TEXT] | [INSERT FIRST BUTTON URL]
+
+IMG: [INSERT SECOND IMAGE URL] | [INSERT SECOND IMAGE ALT]
+[INSERT SECOND HEADING HERE]
+[INSERT SECOND DESCRIPTION TEXT]
+
+IMG: [INSERT THIRD IMAGE URL] | [INSERT THIRD IMAGE ALT]
+[INSERT THIRD HEADING HERE]
+[INSERT THIRD DESCRIPTION TEXT]
+
+CTA: [INSERT CTA BUTTON TEXT] | [INSERT CTA BUTTON URL]
+DESC BOTTOM: [INSERT BOTTOM DESCRIPTION TEXT]
+/* end */</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="testimonials">
+                    <h3>Testimonials</h3>
+                    
                     <div class="section">
                         <div class="section-media">
                             <img src="screenshots/cards-columns/6.jpg" alt="Cards Testimonials Example">
@@ -987,100 +1160,6 @@ ICON: ⭐️⭐️⭐️⭐️⭐️| [NAME3] | "[TESTIMONIAL3]"
 ICON: ⭐️⭐️⭐️⭐️⭐️| [NAME4] | "[TESTIMONIAL4]"
 
 ICON: ⭐️⭐️⭐️⭐️⭐️| [NAME5] | "[TESTIMONIAL5]"
-/* end */</pre>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-content" id="faqs">
-                    <h3>FAQs</h3>
-                    <div class="section">
-                        <div class="section-media">
-                            <img src="screenshots/faqs/1.jpg" alt="FAQ Example">
-                        </div>
-                        <div class="section-content">
-                        <h4>Questions & Answers</h4>
-                        <pre>/* start */
-LAYOUT: FAQ
- 
-DESC TOP ALIGN: center
-DESC TOP: [INSERT TOP DESCRIPTION TEXT]
-FAQ MODE: static
-FAQ ITEM BORDER: 1px solid #e5e7eb
-CARD RADIUS: 10
-
-Q: [INSERT FIRST QUESTION HERE]
-A: [INSERT FIRST ANSWER HERE]
-
-Q: [INSERT SECOND QUESTION HERE]
-A: [INSERT SECOND ANSWER HERE]
-
-Q: [INSERT THIRD QUESTION HERE]
-A: [INSERT THIRD ANSWER HERE]
-
-Q: [INSERT FOURTH QUESTION HERE]
-A: [INSERT FOURTH ANSWER HERE]
-/* end */</pre>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-content" id="galleries">
-                    <h3>Galleries</h3>
-                    <div class="section" data-image="https://beontop.netlify.app/16x9-1600x900.jpg">
-                        <div class="section-media"></div>
-                        <div class="section-content">
-                        <h4>Our Works Zigzag</h4>
-                        <pre>/* start */
-LAYOUT: Zigzag
- 
-COLS: 40 60
-IMAGE SIZE (RATIO): 4/3
-PADDING: 24 16
-MARGIN: 0 0 30 0
-DESC TOP: [INSERT TOP DESCRIPTION TEXT]
-
-IMG: [INSERT FIRST IMAGE URL] | [INSERT FIRST IMAGE ALT]
-[INSERT FIRST HEADING HERE]
-[INSERT FIRST DESCRIPTION TEXT]
-BTN: [INSERT FIRST BUTTON TEXT] | [INSERT FIRST BUTTON URL]
-
-IMG: [INSERT SECOND IMAGE URL] | [INSERT SECOND IMAGE ALT]
-[INSERT SECOND HEADING HERE]
-[INSERT SECOND DESCRIPTION TEXT]
-
-IMG: [INSERT THIRD IMAGE URL] | [INSERT THIRD IMAGE ALT]
-[INSERT THIRD HEADING HERE]
-[INSERT THIRD DESCRIPTION TEXT]
-
-CTA: [INSERT CTA BUTTON TEXT] | [INSERT CTA BUTTON URL]
-DESC BOTTOM: [INSERT BOTTOM DESCRIPTION TEXT]
-/* end */</pre>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-content" id="testimonials">
-                    <h3>Testimonials</h3>
-                    <div class="section" data-image="https://beontop.netlify.app/16x9-1600x900.jpg">
-                        <div class="section-media"></div>
-                        <div class="section-content">
-                        <h4>What Our Clients Say</h4>
-                        <pre>/* start */
-LAYOUT: Cards 3col
-TITLE: [INSERT SECTION TITLE HERE]
-IMAGE SIZE (RATIO): 4/1
-CARD RADIUS: 12
-BORDER CARD: none
-CARD SHADOW: soft
-CARD ALIGN: left
-CARD TITLE COLOR: #111111
-CARD COLOR: #555555
-DESC TOP: [INSERT TOP DESCRIPTION TEXT]
-
-IMG: [INSERT FIRST IMAGE URL] | [INSERT FIRST RATING] [INSERT FIRST CLIENT NAME] | "[INSERT FIRST TESTIMONIAL TEXT]"
-IMG: [INSERT SECOND IMAGE URL] | [INSERT SECOND RATING] [INSERT SECOND CLIENT NAME] | "[INSERT SECOND TESTIMONIAL TEXT]"
-IMG: [INSERT THIRD IMAGE URL] | [INSERT THIRD RATING] [INSERT THIRD CLIENT NAME] | "[INSERT THIRD TESTIMONIAL TEXT]"
 /* end */</pre>
                         </div>
                     </div>
