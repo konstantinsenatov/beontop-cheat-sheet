@@ -66,6 +66,10 @@
             position: relative;
         }
 
+        .code-wrapper {
+            position: relative;
+        }
+
         .copy-button {
             position: absolute;
             top: 0.5rem;
@@ -363,6 +367,7 @@
                     <button class="tab-button" data-tab="faqs">FAQs</button>
                     <button class="tab-button" data-tab="galleries">Galleries</button>
                     <button class="tab-button" data-tab="testimonials">Testimonials</button>
+                    <button class="tab-button" data-tab="tables">Tables</button>
                     <button class="help-button" onclick="openCheatsheet()">📖 Cheatsheet</button>
                 </div>
             </div>
@@ -380,7 +385,7 @@
                         </div>
                         <div class="section-content">
                         <h4>Banner Left Split</h4>
-                        <pre>/* start */
+                        <div class="code-wrapper"><pre>/* start */
 LAYOUT: Banner left split
 ALIGN: left
 VALIGN: center
@@ -411,7 +416,7 @@ INSERT DESCRIPTION TEXT HERE
 
 CTA: BUTTON_TEXT | BUTTON_URL
 BTN: SECONDARY BUTTON TEXT | SECONDARY BUTTON URL
-/* end */</pre>
+/* end */</pre></div>
                         </div>
                     </div>
 
@@ -421,7 +426,7 @@ BTN: SECONDARY BUTTON TEXT | SECONDARY BUTTON URL
                         </div>
                         <div class="section-content">
                         <h4>Banner Right</h4>
-                        <pre>/* start */
+                        <div class="code-wrapper"><pre>/* start */
 LAYOUT: Banner right
 ALIGN: right
 VALIGN: bottom
@@ -456,7 +461,7 @@ INSERT DESCRIPTION TEXT HERE
 
 CTA: BUTTON_TEXT | BUTTON_URL
 BTN: SECONDARY_BUTTON_TEXT | SECONDARY_BUTTON_URL
-/* end */</pre>
+/* end */</pre></div>
                         </div>
                     </div>
 
@@ -466,7 +471,7 @@ BTN: SECONDARY_BUTTON_TEXT | SECONDARY_BUTTON_URL
                         </div>
                         <div class="section-content">
                         <h4>Banner Center Split</h4>
-                        <pre>/* start */
+                        <div class="code-wrapper"><pre>/* start */
 LAYOUT: Banner center split
 ALIGN: center
 VALIGN: center
@@ -497,7 +502,7 @@ INSERT DESCRIPTION TEXT HERE
 INSERT ADDITIONAL TEXT HERE
 
 BTN: BUTTON_TEXT | BUTTON_URL
-/* end */</pre>
+/* end */</pre></div>
                         </div>
                     </div>
 
@@ -507,7 +512,7 @@ BTN: BUTTON_TEXT | BUTTON_URL
                         </div>
                         <div class="section-content">
                         <h4>Banner Center</h4>
-                        <pre>/* start */
+                        <div class="code-wrapper"><pre>/* start */
 LAYOUT: Banner center
 ALIGN: center
 VALIGN: center
@@ -538,7 +543,7 @@ INSERT DESCRIPTION TEXT HERE
 INSERT ADDITIONAL TEXT HERE
 
 BTN: BUTTON_TEXT | BUTTON_URL
-/* end */</pre>
+/* end */</pre></div>
                         </div>
                     </div>
 
@@ -548,7 +553,7 @@ BTN: BUTTON_TEXT | BUTTON_URL
                         </div>
                         <div class="section-content">
                         <h4>Banner Center with Image</h4>
-                        <pre>/* start */
+                        <div class="code-wrapper"><pre>/* start */
 LAYOUT: Banner center
 ALIGN: center
 VALIGN: center
@@ -585,7 +590,7 @@ INSERT MAIN HEADING HERE
 INSERT DESCRIPTION TEXT HERE
 
 BTN: BUTTON_TEXT | BUTTON_URL
-/* end */</pre>
+/* end */</pre></div>
                         </div>
                     </div>
                 </div>
@@ -599,7 +604,7 @@ BTN: BUTTON_TEXT | BUTTON_URL
                         </div>
                         <div class="section-content">
                         <h4>Text Block</h4>
-                        <pre>/* start */
+                        <div class="code-wrapper"><pre>/* start */
 LAYOUT: Text block
 TITLE: INSERT SECTION TITLE HERE
 CONTAINER WIDTH: 1100 | 92%
@@ -616,7 +621,7 @@ INSERT SECOND LIST ITEM
 INSERT THIRD LIST ITEM
 
 CTA: INSERT CTA BUTTON TEXT | /contact
-/* end */</pre>
+/* end */</pre></div>
                         </div>
                     </div>
 
@@ -1354,6 +1359,111 @@ ICON: ⭐️⭐️⭐️⭐️⭐️| NAME5 | "TESTIMONIAL5"
                     </div>
                 </div>
 
+                <div class="tab-content" id="tables">
+                    <h3>Tables</h3>
+                    
+                    <div class="section">
+                        <div class="section-media">
+                            <img src="screenshots/tables/1.jpg" alt="Centered Headers with Left-Aligned Rows">
+                        </div>
+                        <div class="section-content">
+                        <h4>Centered Headers, Left-Aligned Rows</h4>
+                        <pre>/* start */
+LAYOUT: Table
+TITLE: Centered Headers
+TABLE STYLE: bordered
+TABLE HEADER: on
+TABLE HEADER ALIGN: center
+TABLE ROW ALIGN: left
+                            
+
+
+Create a table in Google Docs with your data
+/* end */</pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-media">
+                            <img src="screenshots/tables/2.jpg" alt="Highlighted First Column with Striped Rows">
+                        </div>
+                        <div class="section-content">
+                        <h4>First Column Highlight + Striped Rows</h4>
+                        <pre>/* start */
+LAYOUT: Table
+TITLE: Highlighted First Column
+TABLE STYLE: striped
+TABLE HEADER: on
+TABLE FIRST COL ALIGN: center
+TABLE FIRST COL BG: #e3f2fd
+TABLE FIRST COL COLOR: #1976d2
+ROW EVEN: #f8f9fa
+ROW ODD: #ffffff
+ROW EVEN COLOR: #495057
+ROW ODD COLOR: #212529
+
+Create a table in Google Docs with your data
+/* end */</pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-media">
+                            <img src="screenshots/tables/3.jpg" alt="All Centered with Colored Background">
+                        </div>
+                        <div class="section-content">
+                        <h4>Centered Layout with Section Background</h4>
+                        <pre>/* start */
+LAYOUT: Table
+TITLE: Centered Table
+CONTAINER WIDTH: 800 | 90%
+CONTAINER ALIGN: center
+BG SECTION: #f8f9fa
+TABLE STYLE: bordered
+TABLE HEADER: on
+TABLE HEADER BOLD: on
+TABLE FIRST COL BOLD: on
+TABLE HEADER BG: #f5f5f5
+TABLE HEADER ALIGN: center
+TABLE FIRST COL ALIGN: center
+TABLE FIRST COL BG: #f5f5f5
+TABLE FIRST COL COLOR: #000000
+TABLE ROW ALIGN: center
+                            
+                            
+
+Create a table in Google Docs with your data
+/* end */</pre>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-media">
+                            <img src="screenshots/tables/4.jpg" alt="Right-Aligned with Gradient First Column">
+                        </div>
+                        <div class="section-content">
+                        <h4>No Header, Gradient First Column (Hover)</h4>
+                        <pre>/* start */
+LAYOUT: Table
+TITLE: Left-Aligned Table
+CONTAINER WIDTH: 800 | 90%
+CONTAINER ALIGN: center
+TABLE STYLE: hover
+TABLE HEADER: off
+TABLE FIRST COL BOLD: on
+TABLE HEADER BG: #f5f5f5
+TABLE FIRST COL BG: #f5f5f5
+TABLE FIRST COL COLOR: #000000
+TABLE FIRST COL BG: linear-gradient(135deg, #667eea 0%, #764ba2 100%)
+TABLE FIRST COL COLOR: #000000
+                            
+
+Create a table in Google Docs with your data
+/* end */</pre>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -1404,7 +1514,16 @@ ICON: ⭐️⭐️⭐️⭐️⭐️| NAME5 | "TESTIMONIAL5"
             function hydrateSections(container) {
                 const sections = container.querySelectorAll('.section');
                 sections.forEach(section => {
-                    const pre = section.querySelector('pre');
+                    let pre = section.querySelector('pre');
+                    // Гарантируем обёртку code-wrapper вокруг каждого <pre>
+                    if (pre && !(pre.parentElement && pre.parentElement.classList.contains('code-wrapper'))){
+                        const wrap = document.createElement('div');
+                        wrap.className = 'code-wrapper';
+                        pre.parentElement.insertBefore(wrap, pre);
+                        wrap.appendChild(pre);
+                    }
+                    // после возможной обёртки переопределим ссылку на pre (она могла переместиться)
+                    pre = section.querySelector('pre');
                     const text = pre ? pre.innerText : section.innerText;
                     const explicit = section.getAttribute('data-image');
                     const url = (explicit && explicit.trim()) || extractFirstImageUrlFromText(text);
@@ -1449,9 +1568,9 @@ ICON: ⭐️⭐️⭐️⭐️⭐️| NAME5 | "TESTIMONIAL5"
                             }
                         });
                         
-                        const content = section.querySelector('.section-content');
-                        if (content) {
-                            content.appendChild(copyBtn);
+                        const codeBox = section.querySelector('.code-wrapper') || section.querySelector('.section-content');
+                        if (codeBox) {
+                            codeBox.appendChild(copyBtn);
                         }
                     }
                 });
@@ -1562,6 +1681,7 @@ ICON: ⭐️⭐️⭐️⭐️⭐️| NAME5 | "TESTIMONIAL5"
                     <li><code>LAYOUT: FAQ accordion|static</code></li>
                     <li><code>LAYOUT: Banner [split] [left|center|right]</code> — hero/banner, split separates text/buttons</li>
                     <li><code>LAYOUT: Zigzag</code> — "checkerboard" (row: image ↔ text)</li>
+                    <li><code>LAYOUT: Table</code> — table with customizable styles</li>
                 </ul>
 
                 <h2>General Parameters (for section)</h2>
