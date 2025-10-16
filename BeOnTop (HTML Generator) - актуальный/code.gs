@@ -586,8 +586,8 @@ function tryPushDirective_(cur, line, htmlLine, scope){
   if (RX.ICON_SIZE.test(txt)){
     const raw = txt.replace(RX.ICON_SIZE,'').trim().toLowerCase();
     
-    // Для нового варианта icon-right используем простые размеры
-    if (cur.meta.cardsLayout === 'icon-right') {
+    // Для нового варианта icon-right и icon-left используем простые размеры
+    if (cur.meta.cardsLayout === 'icon-right' || cur.meta.cardsLayout === 'icon-left') {
       if (raw === 'small' || raw === 'medium' || raw === 'large') {
         cur.meta.cardIconSizeClass = raw;
       }
@@ -831,7 +831,8 @@ if (RX.TITLE.test(txt)){
       const r = arg.match(/(\d+)\s*\/\s*(\d+)/);
       if (r) cur.meta.cardRatio = r[1]+'/'+r[2];
       // новый вариант: Cards icon-right
-      if (/\bicon-?right\b/.test(arg)) cur.meta.cardsLayout = 'icon-right';
+             if (/\bicon-?right\b/.test(arg)) cur.meta.cardsLayout = 'icon-right';
+             if (/\bicon-?left\b/.test(arg)) cur.meta.cardsLayout = 'icon-left';
     }
     return true;
   }
@@ -2034,12 +2035,13 @@ const RENDERERS = {
     const cardW   = sec.meta.cardW ? `--bot-card-w:${sec.meta.cardW};` : '';
 
     const badgeSide = (sec.meta.cardAlignIcon==='right' || sec.meta.cardAlignIcon==='left') ? sec.meta.cardAlignIcon : null;
-    const isIconRight = sec.meta.cardsLayout === 'icon-right';
+           const isIconRight = sec.meta.cardsLayout === 'icon-right';
+           const isIconLeft = sec.meta.cardsLayout === 'icon-left';
 
     const lead = sec.blocks.find(b=>b.kind==='lead');
     if (lead?.html) out.push('      <p class="bot-lead bot-center bot-text-muted">'+lead.html+'</p>');
 
-    const cardsClass = isIconRight ? ' bot-cards--icon-right' : '';
+    const cardsClass = isIconRight ? ' bot-cards--icon-right' : (isIconLeft ? ' bot-cards--icon-left' : '');
     out.push('      <div class="bot-cards'+wrapCls+cardsClass+'" style="--bot-cards-cols:'+cols+';'+cardW+'">');
 
     items.forEach(c=>{
@@ -2070,6 +2072,31 @@ const RENDERERS = {
           }
           out.push('            </div>');
         }
+        out.push('          </div>');
+
+        if (c.descr) {
+          out.push('          <p class="bot-card__text">'+c.descr+'</p>');
+        }
+      } else if (isIconLeft) {
+        // Новый вариант: иконка слева, заголовок справа, описание отдельным блоком снизу
+        out.push('          <div class="bot-card__row">');
+
+        if (c.icon || c.img) {
+          const sizeClass = sec.meta.cardIconSizeClass ? ' bot-card__icon--' + sec.meta.cardIconSizeClass : '';
+          out.push('            <div class="bot-card__icon' + sizeClass + '" aria-hidden="true">');
+          if (c.img) {
+            // Изображение как иконка
+            out.push('              <img loading="lazy" decoding="async" src="'+c.img+'" alt="">');
+          } else if (c.icon) {
+            // Эмодзи или символ
+            out.push('              '+c.icon);
+          }
+          out.push('            </div>');
+        }
+
+        out.push('            <div class="bot-card__header">');
+        if (c.title) out.push('              <h3 class="bot-card__title">'+c.title+'</h3>');
+        out.push('            </div>');
         out.push('          </div>');
 
         if (c.descr) {
