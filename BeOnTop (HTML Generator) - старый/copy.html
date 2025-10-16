@@ -1,0 +1,43 @@
+<script>
+  const pv = document.getElementById('pv');
+  let last = '<?= html ?>';
+
+  render(last);
+  setInterval(() => {
+    google.script.run.withSuccessHandler(h => {
+      if (h !== last) { last = h; render(h); }
+    }).buildHtml_();
+  }, 2000);
+
+  function render(html){
+    const css = document.getElementById('cssUrl').value.trim();
+    const doc = pv.contentDocument || pv.contentWindow.document;
+    doc.open();
+    doc.write('<!doctype html><html><head><meta charset="utf-8">');
+    if (css) doc.write('<link rel="stylesheet" href="'+css+'">');
+    doc.write('<style>:root{--bot-gap:16px}</style>');
+    doc.write('</head><body>'+html+'</body></html>');
+    doc.close();
+  }
+
+  function refresh(){
+    google.script.run.withSuccessHandler(h => { last=h; render(h); }).buildHtml_();
+  }
+
+  // ВАЖНО: копируем прямо из сайдбара
+  async function copyHtml(){
+    try {
+      await navigator.clipboard.writeText(last);
+      alert('HTML copied');
+    } catch(e) {
+      // Фолбэк для браузеров без Clipboard API
+      const ta = document.createElement('textarea');
+      ta.value = last;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+      alert('HTML copied (fallback)');
+    }
+  }
+</script>

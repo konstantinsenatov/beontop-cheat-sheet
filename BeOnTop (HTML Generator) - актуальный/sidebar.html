@@ -1,0 +1,1040 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!-- ===== UI панели (только для сайдбара) ===== -->
+  <style>
+    body{font:14px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Arial;margin:0}
+    .top{display:flex;gap:8px;align-items:center;padding:8px;border-bottom:1px solid #eee;flex-wrap:wrap}
+    .btn{padding:6px 10px;border:1px solid #222;border-radius:6px;background:#111;color:#fff;cursor:pointer}
+    .ghost{background:#fff;color:#111}
+    .note{padding:8px;color:#666}
+    iframe{width:100%;height:70vh;border:0}
+    .sec-tools{
+      position: sticky; top: -1px;
+      display: inline-flex; gap: 6px; padding: 6px 8px;
+      background: rgba(255,255,255,.85);
+      border: 1px solid #e5e5e5; border-radius: 8px;
+      backdrop-filter: blur(6px); z-index: 10; transform: translateY(-6px);
+    }
+    .sec-tools .btn{ padding:4px 8px; border-radius:6px; border:1px solid #222; background:#111; color:#fff; }
+    .sec-tools .ghost{ background:#fff; color:#111; }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Панель действий ===== -->
+  <div class="top">
+    <button class="btn" onclick="refresh()">Refresh</button>
+    <button class="btn" onclick="copyHtml()">Copy HTML</button>
+    <button class="btn ghost" onclick="copyHtmlWithCss()">HTML + inline CSS</button>
+    <button class="btn" onclick="savePdf()">Save as PDF</button><!-- НОВОЕ -->
+    <select id="pdfW" class="btn ghost" style="min-width:120px">
+      <option value="">Auto</option>
+      <option value="500">500 px</option>
+      <option value="1440">1440 px</option>
+      <option value="1920">1920 px</option>
+    </select>
+    <button class="btn ghost" onclick="openFull()">Open Full Preview</button>
+  </div>
+
+  <!-- ===== Предпросмотр ===== -->
+  <iframe id="pv" title="Preview"></iframe>
+
+  <div class="note">
+    The preview uses the embedded CSS (see CSS_BOT). The “Save as PDF” button opens the print dialog — choose “Save as PDF”.
+  </div>
+
+  <script>
+    /* --------------------------------------------------------------------
+       1) ТВОЙ CSS (используется в превью, в HTML+CSS и в PDF)
+       -------------------------------------------------------------------- */
+    const CSS_BOT = `
+    /* ==========================================================================
+      BeOnTop Frontend Cheatsheet (neutral / no-colors / no-fonts)
+      Author: BeOnTop
+      Namespace: .bot-*
+      ========================================================================== */
+
+:root{
+  --bot-gap: clamp(12px, 2.5vw, 28px);
+  --bot-gap-sm: clamp(8px, 2vw, 20px);
+  --bot-radius: 0px;
+  --bot-line: 1px;
+}
+
+/* ===== Base ===== */
+.bot-scope, .bot-scope * { box-sizing: border-box; }
+.bot-scope figure { margin: 0; display: block; }
+.bot-scope img { display: block; max-width: 100%; height: auto; vertical-align: middle; }
+.bot-scope a { text-decoration: none; }
+
+.bot-text-sm { font-size: .875rem; }
+.bot-text-muted { opacity: .8; }
+.bot-center { text-align: center; }
+.bot-right  { text-align: right; }
+.bot-rounded { border-radius: var(--bot-radius); }
+.bot-shadow-outline { box-shadow: 0 0 0 var(--bot-line) currentColor; }
+.bot-lead { margin: 0 0 var(--bot-gap) 0; }
+
+.bot-section{
+  position: relative;
+  color: var(--bot-text-color, inherit);
+  max-width: var(--bot-section-maxw, none);
+  margin-inline: auto;
+  margin-block-start: var(--bot-section-mt, 0);
+  margin-block-end:   var(--bot-section-mb, 0);
+  margin:  var(--bot-section-m, var(--bot-section-mt, 0) auto var(--bot-section-mb, 0) auto);
+  padding: var(--bot-section-p, calc(var(--bot-gap)*2) var(--bot-gap));
+
+  /* Фон секции */
+  background-color: var(--bot-section_bgcolor, transparent);
+  background-image: var(--bot-section_bgimg, none);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+
+  border: var(--bot-section-border, none);
+  border-radius: var(--bot-section-radius, 0);
+  overflow: clip;
+
+  margin: var(--bot-section-m, var(--bot-section-mt, 0) 0 var(--bot-section-mb, 0) 0); /* ← боковые = 0 */
+  padding: var(--bot-section-p, calc(var(--bot-gap)*2) var(--bot-gap));
+
+}
+.bot-section::before{
+  content:"";
+  position:absolute; inset:0;
+  background: var(--bot-section_overlay, transparent);
+  border-radius: inherit;          /* чтобы оверлей повторял радиус секции */
+  pointer-events:none;
+}
+
+.bot-section .bot-section-title{ margin: 0 0 var(--bot-gap) 0; line-height: 1.2; }
+
+.bot-container{
+  position: relative;
+  margin-inline: auto;
+
+  background-color: var(--bot-container_bgcolor, transparent);
+  background-image: var(--bot-container_bgimg, none);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+
+  
+  border: var(--bot-container-border, none);
+  border-radius: var(--bot-container-radius, 0);
+  overflow: var(--bot-container-overflow, visible); /* было: clip */
+
+  width: var(--bot-container-pct, 100%);   /* было min(..., 92%) */
+  max-width: var(--bot-container-maxw, none); /* не ограничиваем, пока не задашь директивой */
+  margin: var(--bot-container-m, 0);       /* было 0 auto */
+  padding: var(--bot-container-p, 0);      /* внутренние отступы даёшь директивами */
+
+}
+.bot-container::before{
+  content:"";
+  position:absolute; inset:0;
+  background: var(--bot-container_overlay, transparent);
+  border-radius: inherit;
+  pointer-events:none;
+  z-index: 0;                 /* гарантированно ниже контента */
+}
+.bot-container > *{ position: relative; z-index: 1; }
+
+
+/* Заголовки тянут отдельный цвет; остальной текст — inherit */
+.bot-section .bot-section-title,
+.bot-section-subtitle,
+.bot-hero__title,
+.bot-card__title,
+.bot-faq__title{
+  color: var(--bot-title-color, currentColor)!important;
+}
+
+/* ===== Links (внутри секции; кнопки не трогаем) ===== */
+.bot-section a:not(.bot-btn){
+  color: var(--bot-link-color, currentColor);
+  font-weight: var(--bot-link-weight, inherit);
+  text-decoration: var(--bot-link-decoration, none);
+}
+.bot-section[data-link-underline="hover"] a:not(.bot-btn){ text-decoration: none; }
+.bot-section[data-link-underline="hover"] a:not(.bot-btn):hover{ text-decoration: underline; }
+.bot-section a:not(.bot-btn):visited{ color: var(--bot-link-color, currentColor); }
+
+/* ===== Buttons ===== */
+.bot-btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:.6rem 1rem;
+  background: var(--bot-btn-bg, transparent);
+  border: var(--bot-btn-border, var(--bot-line) solid var(--bot-btn-color, currentColor));
+  border-radius: var(--bot-btn-radius, var(--bot-radius));
+  line-height:1.1; cursor:pointer;
+  color: var(--bot-btn-color, currentColor);
+}
+.bot-hero.is-split  .bot-hero__cta{ display: flex; flex-direction: column; gap: 10px }
+.bot-btn:hover,.bot-btn:focus{ outline:none; box-shadow:0 0 0 calc(var(--bot-line)*2) currentColor; }
+
+/* Кнопки наследуют цвет из секции, можно переопределить переменной */
+.bot-section .bot-btn{
+  color: var(--bot-btn-color, currentColor);
+  border-color: var(--bot-btn-color, currentColor);
+}
+.bot-section .bot-btn:hover,
+.bot-section .bot-btn:focus{
+  outline:none;
+  box-shadow: 0 0 0 calc(var(--bot-line)*2) var(--bot-btn-color, currentColor);
+}
+
+.bot-actions{ display:flex; flex-wrap:wrap; gap:.5rem; }
+
+/* ============================== HERO / BANNER ============================== */
+.bot-hero{
+  position: relative;
+  padding: 0;
+  max-width: var(--bot-hero-maxw, none);
+  margin-inline: auto;
+}
+.bot-hero::before{
+  content:"";
+  position:absolute; inset:0;
+  background: var(--bot-hero-overlay, transparent);
+  pointer-events:none;
+}
+.bot-hero__inner{
+  display:grid; gap:var(--bot-gap);
+  grid-template-columns: 1fr;
+  position: relative; z-index: 1; /* над оверлеем */
+}
+.bot-hero.is-center .bot-hero__inner{ text-align:center; justify-items:center; }
+.bot-hero.is-right  .bot-hero__inner{ text-align:right;  justify-items:end; }
+
+/* Разделённый режим: текст слева 70%, кнопки справа */
+@media (min-width:768px){
+  .bot-hero.is-split .bot-hero__inner{ grid-template-columns: 70% 1fr; }
+  .bot-hero__cta{ justify-self: end; }
+}
+
+/* Вертикальное выравнивание */
+.bot-hero.is-vcenter .bot-hero__inner{ min-height: var(--bot-hero-minh, auto); align-content: center; }
+.bot-hero.is-vbottom .bot-hero__inner{ min-height: var(--bot-hero-minh, auto); align-content: end; }
+@media (min-width:768px){
+  .bot-hero.is-split.is-vcenter .bot-hero__inner{ align-items: center; }
+  .bot-hero.is-split.is-vbottom .bot-hero__inner{ align-items: end; }
+  .bot-hero.is-split:not(.is-vcenter):not(.is-vbottom) .bot-hero__inner{ align-items: start; }
+}
+
+/* Содержимое */
+.bot-hero__title{ margin:0 0 .5rem 0; line-height:1.2; }
+.bot-hero__desc { margin:0; opacity:.85; }
+.bot-hero__actions{ margin-top: var(--bot-gap-sm); display:flex; gap:.5rem; flex-wrap:wrap; }
+/* Горизонтальное выравнивание экшенов по модификаторам баннера */
+.bot-hero.is-center .bot-hero__actions{ justify-content: center; }
+.bot-hero.is-right  .bot-hero__actions{ justify-content: flex-end; }
+
+/* ============================== MEDIA (img + content) ============================== */
+.bot-media{
+  display:grid; gap:var(--bot-gap);
+  grid-template-areas:
+    "image"
+    "content";
+}
+/* Стэк: картинка сверху, контент ниже — на всех ширинах */
+.bot-media.is-stacked{
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "image"
+    "content";
+}
+@media (min-width:768px){
+  .bot-media{
+    grid-template-columns: minmax(0, var(--bot-media-img, 1fr)) minmax(0, var(--bot-media-content, 1fr));
+    grid-template-areas: "image content";
+    align-items:center;
+  }
+  .bot-media.is-right{
+    grid-template-columns: minmax(0, var(--bot-media-content, 1fr)) minmax(0, var(--bot-media-img, 1fr));
+    grid-template-areas: "content image";
+  }
+  .bot-media.is-stacked{
+    grid-template-columns: 1fr !important;
+    grid-template-areas:
+      "image"
+      "content" !important;
+    align-items: start;
+  }
+}
+.bot-media__col{ min-width:0; }
+.bot-media__imgcol{ grid-area: image; }
+.bot-media__txtcol{ grid-area: content; }
+.bot-media__figure{ margin:0; }
+.bot-media__img{ aspect-ratio: var(--bot-media-ratio, 4/3); object-fit:cover; width:100%; }
+.bot-media__cap{ margin-top:.35rem; }
+.bot-media__img{
+  aspect-ratio: var(--bot-media-ratio, 4/3);
+  object-fit:cover; width:100%;
+  border-radius: var(--bot-img-radius, var(--bot-radius, 0px));
+}
+
+/* ============================== CARDS ============================== */
+.bot-cards{
+  display:grid;
+  gap:var(--bot-gap);
+  grid-template-columns: 1fr;
+}
+@media (min-width:768px){
+  .bot-cards{ grid-template-columns: repeat(var(--bot-cards-cols, 3), minmax(0,1fr)); }
+}
+.bot-card{
+  border:var(--bot-line) solid currentColor;
+  border-radius: var(--bot-card-radius, var(--bot-radius, 0px));
+  display:flex; flex-direction:column;
+  overflow:hidden;
+}
+.bot-card__media{
+  aspect-ratio: var(--bot-card-ratio, 4/3);
+  object-fit:cover; width:100%;
+}
+.bot-card__icon{
+  display:flex; align-items:center; justify-content:center;
+  width:100%; aspect-ratio: var(--bot-card-ratio, 4/1);
+  font-size: clamp(24px, 8vw, 56px); line-height:1;
+}
+.bot-card__body{ padding:1rem; display:flex; flex-direction:column; gap:.5rem; }
+.bot-card__title{ margin:0; }
+.bot-card__text{ margin:0; }
+.bot-card__actions{ margin-top:auto; display:flex; gap:.5rem; }
+.bot-card{
+  color: var(--bot-card-color, inherit);
+  background-color: var(--bot-card-bgcolor, transparent);
+  background-image: var(--bot-card-bgimg, none);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  border: var(--bot-card-border, var(--bot-line) solid currentColor);
+  border-radius: var(--bot-card-radius, var(--bot-radius, 0px));
+  display:flex; flex-direction:column; overflow:hidden;
+}
+.bot-card__title{
+  margin:0;
+  color: var(--bot-card-title-color, var(--bot-title-color, currentColor));
+}
+.bot-card__body,
+.bot-card__actions {
+  width: 100%;             /* чтобы занимало всю ширину */
+  display: flex;
+  flex-direction: column;
+  align-items: center;     /* кнопка + текст по центру */
+}
+
+
+/* ============================== FAQ ============================== */
+.bot-faq{ display:grid; gap: var(--bot-gap); }
+
+.bot-faq__item{
+  border: var(--bot-faq-item-border, var(--bot-line) solid currentColor);
+  border-radius: var(--bot-card-radius, var(--bot-radius));
+  overflow: hidden;
+  background: transparent;
+}
+
+/* Шапка вопроса */
+.bot-faq__q{
+  display:grid;
+  grid-template-columns: auto 1fr auto;  /* иконка | заголовок | индикатор */
+  align-items: center;
+  gap: .75rem;
+  padding: 1rem;
+  cursor: default;
+}
+.bot-faq__title{ margin: 0; line-height: 1.2; }
+
+/* Ответ */
+.bot-faq__a{ padding: 0 1rem 1rem 1rem; }
+.bot-faq__a p{ margin: 0; }
+
+/* Иконка у вопроса */
+.bot-faq__icon{
+  inline-size: 36px; block-size: 36px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 var(--bot-line) currentColor;
+  display:flex; align-items:center; justify-content:center;
+  font-size: 18px; line-height:1;
+}
+
+/* Аккордеон (details/summary) */
+details.bot-faq__item > summary.bot-faq__q { list-style: none; }
+details.bot-faq__item > summary::-webkit-details-marker { display:none; }
+details.bot-faq__item > summary::marker { content:''; }
+
+/* Индикатор раскрытия (+/–) */
+.bot-faq__chev{
+  inline-size: 18px; block-size: 18px; position: relative;
+}
+.bot-faq__chev::before, .bot-faq__chev::after{
+  content:''; position:absolute; inset: 50% auto auto 50%;
+  width: 12px; height: 2px; transform: translate(-50%,-50%);
+  background: currentColor;
+}
+.bot-faq__chev::after{ transform: translate(-50%,-50%) rotate(90deg); }
+details[open] .bot-faq__chev::after{ opacity:0; }
+
+/* Ховеры/фокус у summary */
+details.bot-faq__item > summary.bot-faq__q:hover,
+details.bot-faq__item > summary.bot-faq__q:focus{
+  outline:none;
+  box-shadow: 0 0 0 calc(var(--bot-line)*2) currentColor inset;
+}
+
+/* Кнопка в конце FAQ */
+.bot-faq__actions{ display:flex; justify-content:center; gap:.5rem; }
+.bot-faq__item{
+  border: var(--bot-faq-item-border, var(--bot-line) solid currentColor);
+  border-radius: var(--bot-card-radius, var(--bot-radius));
+  overflow: hidden;
+
+  background-color: var(--bot-faq-item-bgcolor, transparent);
+  background-image: var(--bot-faq-item-bgimg, none);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+
+  box-shadow: var(--bot-faq-item-shadow, none);
+}
+
+
+/* Mobile: sections & containers are full-width */
+@media (max-width: 767px){
+  .bot-container{
+    width: 100%;
+    margin:  var(--bot-container-m-m, var(--bot-container-m, 0));
+    padding: var(--bot-container-p-m, var(--bot-container-p, 0));
+  }
+  .bot-section{
+    max-width: none;
+    margin:  var(--bot-section-m-m, var(--bot-section-m, var(--bot-section-mt, 0) 0 var(--bot-section-mb, 0) 0));
+    padding: var(--bot-section-p-m, var(--bot-section-p, calc(var(--bot-gap)*2) var(--bot-gap)));
+  }
+  .bot-hero{ max-width: none; }
+}
+/* ===== Section descriptions (inside container) ===== */
+.bot-section-desc { margin: var(--bot-gap) 0 0 0; }
+.bot-section-desc.is-top    { margin-top: 0; margin-bottom: var(--bot-gap); }
+.bot-section-desc.is-bottom { margin-top: var(--bot-gap); }
+.bot-section-desc p { margin: .25rem 0; }
+
+.bot-seo{
+  max-width: var(--bot-section-maxw, none);
+  margin: var(--bot-gap) auto;
+  padding: .75rem 1rem;
+  border: 1px dashed #ddd;
+  border-radius: 6px;
+  line-height: 1.45;
+}
+.bot-seo b{ font-weight: 700; }
+
+/* ============================== ZIGZAG ============================== */
+.bot-zigzag{ display:grid; gap:var(--bot-gap); }
+
+.bot-zigzag__row{
+  display:grid; gap:var(--bot-gap);
+  grid-template-columns: 1fr;               /* мобильный стек */
+  grid-template-areas:
+    "image"
+    "content";                               /* мобайл: сначала изображение */
+}
+
+@media (min-width:768px){
+  .bot-zigzag__row{
+    grid-template-columns:
+      minmax(0, var(--bot-zig-img,1fr))
+      minmax(0, var(--bot-zig-content,1fr));
+    grid-template-areas: "image content";    /* ряд: изображение | контент */
+    align-items:center;
+  }
+  .bot-zigzag__row.is-right{
+    grid-template-columns:
+      minmax(0, var(--bot-zig-content,1fr))
+      minmax(0, var(--bot-zig-img,1fr));
+    grid-template-areas: "content image";    /* ряд: контент | изображение */
+  }
+}
+
+.bot-zigzag__col{ min-width:0; }
+.bot-zigzag__imgcol{ grid-area: image; }
+.bot-zigzag__txtcol{ grid-area: content; }
+.bot-zigzag__figure{ margin:0; }
+.bot-zigzag__img{
+  width:100%;
+  aspect-ratio: var(--bot-zig-ratio, 4/3);
+  object-fit:cover;
+  border-radius: var(--bot-img-radius, var(--bot-radius, 0px));
+}
+.bot-zigzag__cap{ margin-top:.35rem; }
+
+.bot-section-desc { margin: .5rem 0; color: var(--bot-text-muted, #666); }
+/* дефолт — центр, как ты просил ранее */
+.bot-section-desc.is-top,
+.bot-section-desc.is-bottom { text-align: center; }
+
+.bot-section-desc.align-left { text-align: left; }
+.bot-section-desc.align-center { text-align: center; }
+.bot-section-desc.align-right { text-align: right; }
+
+
+
+.bot-section,
+.bot-container,
+.bot-card,
+.bot-btn,
+.bot-faq__item {
+  border: none; /* дефолт: выключено */
+}
+
+/* Если подставлен кастомный бордер через inline-style (CSS var), он перекроет none */
+.bot-section { border: var(--bot-section-border, none); }
+.bot-container { border: var(--bot-container-border, none); }
+.bot-card { border: var(--bot-card-border, none); }
+.bot-btn { border: var(--bot-btn-border, none); }
+.bot-faq__item { border: var(--bot-faq-item-border, none); }
+
+.bot-card.align-left {
+  text-align: left;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.bot-card.align-center {
+  text-align: center;
+  justify-content: flex-start;
+}
+.bot-card.align-right {
+  text-align: right;
+  align-items: flex-end;
+  justify-content: flex-start;
+}
+
+.bot-shadow-outline{ box-shadow: none; }
+
+.bot-card{
+  box-shadow: var(--bot-card-shadow, none);
+  transition: box-shadow .2s ease;
+}
+.bot-card:hover{
+  box-shadow: var(--bot-card-shadow-hover, var(--bot-card-shadow, none));
+}
+
+/* Cards: last row centered (flex-wrap mode) */
+.bot-cards.is-wrap-center{
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--bot-gap);
+  justify-content: center;
+}
+.bot-cards.is-wrap-center > .bot-card{
+  flex: 0 1 var(--bot-card-w, 360px);
+  width: var(--bot-card-w, 360px);
+  max-width: 100%;
+}
+
+/* ============================== GALLERY ============================== */
+.bot-gallery{
+  display: grid;
+  gap: var(--bot-gallery-gap, var(--bot-gap));
+  grid-template-columns: 1fr;              /* мобайл — одна колонка */
+}
+@media (min-width:768px){
+  .bot-gallery{ grid-template-columns: repeat(var(--bot-gallery-cols, 3), minmax(0,1fr)); }
+}
+.bot-gallery__item{ display:flex; flex-direction:column; gap:.35rem; }
+.bot-gallery__img{
+  width:100%;
+  aspect-ratio: var(--bot-gallery-ratio, 4/3);
+  object-fit: cover;
+  border-radius: var(--bot-img-radius, var(--bot-radius, 0px));
+}
+.bot-gallery__cap{ margin:0; }
+.bot-gallery__actions{ display:flex; justify-content:center; gap:.5rem; }
+
+
+/* ============================== TABLE ============================== */
+.bot-table-wrapper{
+  overflow-x: auto;
+  margin: var(--bot-gap) 0;
+  border-radius: var(--bot-radius, 0px);
+  box-shadow: 0 0 0 var(--bot-line, 1px) rgba(0,0,0,0.1);
+}
+
+.bot-table{
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  background: #fff;
+}
+
+.bot-table th,
+.bot-table td{
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.bot-table th{
+  background: var(--bot-table-header-bg, rgba(0,0,0,0.05));
+  font-weight: 600;
+  color: var(--bot-table-header-color, var(--bot-title-color, inherit));
+}
+
+.bot-table tr:nth-child(even){
+  background: var(--bot-table-row-even, transparent);
+  color: var(--bot-table-row-even-color, inherit);
+}
+.bot-table tr:nth-child(odd){
+  background: var(--bot-table-row-odd, transparent);
+  color: var(--bot-table-row-odd-color, inherit);
+}
+.bot-table tr:hover{
+  background: rgba(0,0,0,0.02) !important;
+}
+
+/* Стили таблиц */
+.bot-table--default{
+  /* базовый стиль уже определен выше */
+}
+
+.bot-table--bordered th,
+.bot-table--bordered td{
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+.bot-table--striped tr:nth-child(even){
+  background: var(--bot-table-row-even, rgba(0,0,0,0.02));
+}
+.bot-table--striped tr:nth-child(odd){
+  background: var(--bot-table-row-odd, transparent);
+}
+
+.bot-table--hover tr:hover{
+  background: rgba(0,0,0,0.05);
+}
+
+.bot-table--compact th,
+.bot-table--compact td{
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+.bot-table--spacious th,
+.bot-table--spacious td{
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
+}
+
+/* Адаптивность */
+@media (max-width: 768px){
+  .bot-table-wrapper{
+    font-size: 0.8rem;
+  }
+  .bot-table th,
+  .bot-table td{
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+/* Карточки с заголовком слева и иконкой справа */
+.bot-cards--icon-right .bot-card{ 
+  padding: 1rem; 
+  background-color: var(--bot-card-bgcolor, #f5f5f5);
+}
+.bot-cards--icon-right .bot-card__row{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+.bot-cards--icon-right .bot-card__header{ 
+  display:flex; 
+  flex-direction:column; 
+  gap:.25rem; 
+  text-align: left;
+}
+
+.bot-cards--icon-right .bot-card__title{
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.bot-cards--icon-right .bot-card__text{ 
+  margin:.5rem 0 0 0; 
+  font-size:.9rem; 
+  line-height:1.4; 
+  color: var(--bot-text-muted, #666);
+  text-align: left;
+}
+
+.bot-cards--icon-right .bot-card__icon{
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  background: transparent;
+  border-radius: var(--bot-card-icon-radius, 8px);
+  overflow: hidden;
+}
+
+.bot-cards--icon-right .bot-card__icon img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Размеры иконок */
+.bot-cards--icon-right .bot-card__icon--small{
+  width: 50px;
+  height: 50px;
+  font-size: 20px;
+}
+
+.bot-cards--icon-right .bot-card__icon--medium{
+  width: 80px;
+  height: 80px;
+  font-size: 32px;
+}
+
+.bot-cards--icon-right .bot-card__icon--large{
+  width: 120px;
+  height: 120px;
+  font-size: 48px;
+}
+
+@media (max-width: 768px){
+  .bot-cards--icon-right .bot-card{ padding: .75rem; }
+  .bot-cards--icon-right .bot-card__row{ gap:.75rem; }
+  .bot-cards--icon-right .bot-card__icon{ width: 40px; height: 40px; font-size: 20px; }
+  .bot-cards--icon-right .bot-card__icon--small{
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+  .bot-cards--icon-right .bot-card__icon--medium{
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+  }
+  .bot-cards--icon-right .bot-card__icon--large{
+    width: 80px;
+    height: 80px;
+    font-size: 32px;
+  }
+}
+
+
+`;
+
+
+// --- маркеры разделов в CSS_BOT (мы уже видим их в твоём CSS по комментариям) ---
+const MARK = {
+  hero:  '/* ============================== HERO',
+  media: '/* ============================== MEDIA',
+  cards: '/* ============================== CARDS',
+  faq:   '/* ============================== FAQ',
+  zig:   '/* ============================== ZIGZAG',
+  table: '/* ============================== TABLE ============================== */',
+  mobile:'/* Mobile: sections & containers are full-width */'
+};
+
+// аккуратно режем CSS_BOT по маркерам
+function cssSlice(from, to){
+  const i = CSS_BOT.indexOf(from);
+  if (i === -1) return '';
+  const j = to ? CSS_BOT.indexOf(to, i + from.length) : -1;
+  return CSS_BOT.slice(i, j !== -1 ? j : CSS_BOT.length).trim() + '\n';
+}
+
+// БАЗОВАЯ часть: всё до HERO (включает reset/утилиты/section/container/links/buttons и т.д.)
+const CSS_BASE   = CSS_BOT.slice(0, CSS_BOT.indexOf(MARK.hero)).trim() + '\n';
+
+// МОДУЛИ
+const CSS_HERO   = cssSlice(MARK.hero,  MARK.media);
+const CSS_MEDIA  = cssSlice(MARK.media, MARK.cards);
+const CSS_CARDS  = cssSlice(MARK.cards, MARK.faq);
+const CSS_FAQ    = cssSlice(MARK.faq,   MARK.zig);
+const CSS_ZIG    = cssSlice(MARK.zig,   MARK.table);
+const CSS_TABLE  = cssSlice(MARK.table, null);
+
+// «общие хвосты» (mobile + описания, seo-блок и прочие полезные кусочки после FAQ)
+const CSS_COMMON_AFTER = cssSlice(MARK.mobile, MARK.zig); // всё между Mobile… и началом ZigZag (если ZigZag нет — пусто)
+
+// Собираем CSS для ОДНОЙ секции
+function buildCssForSection(secEl){
+  // определяем тип секции по внутренним блокам
+  const type =
+    secEl.querySelector('.bot-hero')   ? 'hero'  :
+    secEl.querySelector('.bot-media')  ? 'media' :
+    secEl.querySelector('.bot-cards')  ? 'cards' :
+    secEl.querySelector('.bot-faq')    ? 'faq'   :
+    secEl.querySelector('.bot-zigzag') ? 'zig'   :
+    secEl.querySelector('.bot-table')  ? 'table' : 'media'; // дефолт
+
+  const parts = [CSS_BASE, CSS_COMMON_AFTER];  // база всегда нужна
+  if (type === 'hero')  parts.push(CSS_HERO);
+  if (type === 'media') parts.push(CSS_MEDIA);
+  if (type === 'cards') parts.push(CSS_CARDS);
+  if (type === 'faq')   parts.push(CSS_FAQ);
+  if (type === 'zig')   parts.push(CSS_ZIG);
+  if (type === 'table') parts.push(CSS_TABLE);
+  return parts.join('\n').trim();
+}
+
+// Собираем CSS «по странице» (для верхней панели, если захочешь)
+function buildCssForPage(doc){
+  const has = (sel)=> !!doc.querySelector(sel);
+  const parts = [CSS_BASE, CSS_COMMON_AFTER];
+  if (has('.bot-hero'))   parts.push(CSS_HERO);
+  if (has('.bot-media'))  parts.push(CSS_MEDIA);
+  if (has('.bot-cards'))  parts.push(CSS_CARDS);
+  if (has('.bot-faq'))    parts.push(CSS_FAQ);
+  if (has('.bot-zigzag')) parts.push(CSS_ZIG);
+  if (has('.bot-table'))  parts.push(CSS_TABLE);
+  return parts.join('\n').trim();
+}
+
+
+const TOOLS_CSS = `<style>
+  .sec-tools{
+    position: sticky; top:-1px;
+    display:inline-flex; gap:6px; padding:6px 8px;
+    background: rgba(255,255,255,.85);
+    border:1px solid #e5e5e5; border-radius:8px;
+    backdrop-filter: blur(6px); z-index:10; transform: translateY(-6px);
+  }
+  .sec-tools .btn{ padding:4px 8px; border-radius:6px; border:1px solid #222; background:#111; color:#fff; }
+  .sec-tools .ghost{ background:#fff; color:#111; }
+</style>`;
+
+    /* --------------------------------------------------------------------
+       2) Состояние/превью
+       -------------------------------------------------------------------- */
+    const pv = document.getElementById('pv');
+    let last = '<?= html ?>';
+
+    render(last);
+    setInterval(() => {
+      google.script.run.withSuccessHandler(h => {
+        if (h !== last) { last = h; render(h); }
+      }).buildHtml_();
+    }, 1200);
+
+
+    async function copyHtml(){
+      try{ await navigator.clipboard.writeText(last); alert('HTML copied'); }
+      catch(e){ fallbackCopy(last); }
+    }
+
+    async function copyHtmlWithCss(){
+      const wrapped = `<style>${CSS_BOT}</style>\n` + last;
+      try{ await navigator.clipboard.writeText(wrapped); alert('HTML + CSS copied'); }
+      catch(e){ fallbackCopy(wrapped); }
+    }
+
+    function refresh(){
+      google.script.run.withSuccessHandler(h => { last=h; render(h); }).buildHtml_();
+    }
+
+
+function render(html){
+  const doc = pv.contentDocument || pv.contentWindow.document;
+  doc.open();
+  doc.write(
+    '<!doctype html><html><head><meta charset="utf-8">' +
+    '<style>' + CSS_BOT + '</style>' + TOOLS_CSS +
+    '</head><body>' + html + '</body></html>'
+  );
+  doc.close();
+  setTimeout(mountSectionTools, 0); // повесить панели после перерисовки
+}
+
+
+function copyText(s){
+  return navigator.clipboard.writeText(s).catch(()=>fallbackCopy(s));
+}
+
+function sectionHtmlOuter(el){
+  // чистим data-атрибуты превью
+  const clone = el.cloneNode(true);
+  clone.removeAttribute('data-sec-id');
+  clone.removeAttribute('data-custom');
+  return clone.outerHTML;
+}
+
+function mountSectionTools(){
+  const doc = pv.contentDocument || pv.contentWindow.document;
+  if (!doc) return;
+
+  // удалить старые панели
+  doc.querySelectorAll('.sec-tools').forEach(n=>n.remove());
+
+  // копирование из iframe (с фолбэком)
+  const win = doc.defaultView || pv.contentWindow;
+  const copyFromFrame = async (text) => {
+    try{
+      if (win.navigator?.clipboard?.writeText) {
+        await win.navigator.clipboard.writeText(text);
+      } else {
+        throw new Error('no-clipboard');
+      }
+      win.alert('Скопировано');
+    } catch(e){
+      const ta = doc.createElement('textarea');
+      ta.value = text;
+      doc.body.appendChild(ta);
+      ta.focus(); ta.select();
+      try{ doc.execCommand('copy'); }catch(_){}
+      ta.remove();
+      win.alert('Скопировано (fallback)');
+    }
+  };
+
+  // панели перед КАЖДОЙ секцией, помеченной как кастомная
+  const secs = [...doc.querySelectorAll('section.bot-section[data-custom="1"]')];
+  secs.forEach(sec=>{
+    const bar = doc.createElement('div');
+    bar.className = 'sec-tools';
+    bar.innerHTML = `
+      <button class="btn" data-act="html">Copy HTML</button>
+      <button class="btn" data-act="both">HTML + CSS</button>
+      <button class="btn ghost" data-act="css">Copy CSS</button>
+    `;
+    bar.addEventListener('click', (e)=>{
+      const act = e.target && e.target.getAttribute('data-act');
+      if (!act) return;
+
+      const htmlOnly = '<div class="bot-scope">\n' + sectionHtmlOuter(sec) + '\n</div>';
+      const cssUsed  = buildCssForSection(sec); // <-- только нужные куски
+
+      if (act === 'html')  copyFromFrame(htmlOnly);
+      if (act === 'css')   copyFromFrame(cssUsed);
+      if (act === 'both')  copyFromFrame('<style>'+cssUsed+'</style>\n' + htmlOnly);
+    });
+    sec.parentNode.insertBefore(bar, sec);
+  });
+}
+
+    function fallbackCopy(text){
+      const ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta);
+      ta.select(); document.execCommand('copy'); ta.remove();
+      alert('Скопировано (fallback)');
+    }
+
+    function openFull(){
+      const htmlDoc = `
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Full Preview</title>
+  <style>${CSS_BOT}</style>
+</head>
+<body>${last}</body>
+</html>`;
+  
+      const w = window.open('', '_blank');
+      if(!w){ alert('Please allow pop-ups for this site.'); return; }
+      w.document.open();
+      w.document.write(htmlDoc);
+      w.document.close();
+    }
+
+
+    // ===== Сохранение в PDF через окно печати =====
+    function savePdf(){
+      const sel = document.getElementById('pdfW');
+      const layoutW = parseInt(sel?.value || '1200', 10);  // 500 | 1440 | 1920 | (Auto→1200)
+
+      // px↔mm
+      const PX_PER_MM = 96/25.4;
+
+      // Наш «лист» будет ровно ширины макета (без полей)
+      const pageWmm = layoutW / PX_PER_MM;
+
+      const htmlDoc = `<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>BeOnTop snippet</title>
+  <style>
+    ${CSS_BOT}
+
+    /* === Один сплошной лист === */
+    @page{
+      /* ширина в мм берём из макета, высоту подставим скриптом */
+      size: ${pageWmm}mm auto;
+      margin: 0;                  /* никаких полей — чтобы не резало */
+    }
+    html,body{ margin:0; padding:0; background:#fff; }
+
+    /* Макет по центру */
+    .print-area{ width:100%; display:flex; justify-content:center; }
+    .pdf-viewport{ width:${layoutW}px; margin:0 auto; }
+
+    /* НЕ ставим break-inside на крупные контейнеры,
+       чтобы браузер не «раздувал» пустоты */
+    @media print{
+      html{-webkit-print-color-adjust:exact; print-color-adjust:exact;}
+      figure, img,
+      .bot-zigzag__row,
+      .bot-card,
+      .bot-gallery__item,
+      .bot-faq__item,
+      details.bot-faq__item,
+      h1,h2,h3,h4,h5,h6,
+      ul,ol,p{
+        break-inside: avoid-page; page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="print-area">
+    <div class="pdf-viewport" id="__pdfV">${last}</div>
+  </div>
+
+  <script>
+    (function(){
+      const PX_PER_MM = ${PX_PER_MM};
+      const pageWmm   = ${pageWmm};
+
+      // после рендера считаем реальную высоту контента и ставим её в @page
+      function setOnePageHeight(){
+        const el = document.getElementById('__pdfV');
+        const hPx = el ? el.getBoundingClientRect().height : 0;
+        const hMm = Math.ceil(hPx / PX_PER_MM) + 2; // + небольшой запас
+        const st = document.createElement('style');
+        st.textContent = '@page{size:'+pageWmm+'mm '+hMm+'mm; margin:0;}';
+        document.head.appendChild(st);
+      }
+
+      window.addEventListener('load', ()=>{
+        // даём дорисоваться шрифтам/картинкам
+        setTimeout(()=>{ setOnePageHeight(); setTimeout(()=>window.print(), 200); }, 100);
+      });
+    })();
+  <\/script>
+</body>
+</html>`;
+
+      const w = window.open('', '_blank');
+      if(!w){ alert('Please allow pop-ups for this site and try again.'); return; }
+      w.document.open();
+      w.document.write(htmlDoc);
+      w.document.close();
+    }
+  </script>
+</body>
+</html>
