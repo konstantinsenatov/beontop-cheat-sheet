@@ -298,13 +298,40 @@
 }
 .bot-card__icon{
   display:flex; align-items:center; justify-content:center;
-  width:100%; aspect-ratio: var(--bot-card-ratio, 4/1);
-  font-size: clamp(24px, 8vw, 56px); line-height:1;
+  width: auto; height: auto;
+  aspect-ratio: 1/1;
+  font-size: clamp(32px, 10vw, 72px); line-height:1;
+  background: var(--bot-card-icon-bg, transparent);
+  border-radius: var(--bot-card-icon-radius, 50%);
+  color: var(--bot-card-icon-color, currentColor);
+  min-width: 60px;
+  min-height: 60px;
+  max-width: 120px;
+  max-height: 120px;
 }
-.bot-card__body{ padding:1rem; display:flex; flex-direction:column; gap:.5rem; }
+.bot-card__body{ padding:1rem; display:flex; flex-direction:column; gap:.5rem; align-items:center; text-align:center; }
 .bot-card__title{ margin:0; }
 .bot-card__text{ margin:0; }
 .bot-card__actions{ margin-top:auto; display:flex; gap:.5rem; }
+
+/* Выравнивание содержимого карточек */
+.bot-card.align-left .bot-card__body{ align-items:flex-start; text-align:left; }
+.bot-card.align-center .bot-card__body{ align-items:center; text-align:center; }
+.bot-card.align-right .bot-card__body{ align-items:flex-end; text-align:right; }
+
+/* Выравнивание иконок в зависимости от CARD ALIGN */
+.bot-card.align-left .bot-card__icon{ margin-left: 0; margin-right: auto; }
+.bot-card.align-center .bot-card__icon{ margin-left: auto; margin-right: auto; }
+.bot-card.align-right .bot-card__icon{ margin-left: auto; margin-right: 0; }
+
+/* Выравнивание для icon-right и icon-left карточек */
+.bot-card.align-left .bot-card__row{ justify-content: flex-start; }
+.bot-card.align-center .bot-card__row{ justify-content: center; }
+.bot-card.align-right .bot-card__row{ justify-content: flex-end; }
+
+.bot-card.align-left .bot-card__content{ text-align: left; }
+.bot-card.align-center .bot-card__content{ text-align: center; }
+.bot-card.align-right .bot-card__content{ text-align: right; }
 .bot-card{
   color: var(--bot-card-color, inherit);
   background-color: var(--bot-card-bgcolor, transparent);
@@ -532,8 +559,8 @@ details.bot-faq__item > summary.bot-faq__q:focus{
   justify-content: center;
 }
 .bot-cards.is-wrap-center > .bot-card{
-  flex: 0 1 var(--bot-card-w, 360px);
-  width: var(--bot-card-w, 360px);
+  flex: 0 1 calc((100% - var(--bot-gap) * (var(--bot-cards-cols, 3) - 1)) / var(--bot-cards-cols, 3));
+  width: calc((100% - var(--bot-gap) * (var(--bot-cards-cols, 3) - 1)) / var(--bot-cards-cols, 3));
   max-width: 100%;
 }
 
@@ -652,7 +679,7 @@ details.bot-faq__item > summary.bot-faq__q:focus{
   align-items: center;
   gap: 1rem;
 }
-.bot-cards--icon-right .bot-card__header{ 
+.bot-cards--icon-right .bot-card__content{ 
   display:flex; 
   flex-direction:column; 
   gap:.25rem; 
@@ -700,14 +727,13 @@ details.bot-faq__item > summary.bot-faq__q:focus{
 }
 .bot-cards--icon-left .bot-card__row{
   display: flex;
-  align-items: center;
   gap: 1rem;
 }
-.bot-cards--icon-left .bot-card__header{ 
+.bot-cards--icon-left .bot-card__content{ 
   display:flex; 
   flex-direction:column; 
   gap:.25rem; 
-  text-align: right;
+  text-align: inherit;
 }
 
 .bot-cards--icon-left .bot-card__title{
@@ -744,32 +770,65 @@ details.bot-faq__item > summary.bot-faq__q:focus{
   object-fit: contain;
 }
 
+/* Карточки с иконками сверху */
+.bot-cards--icon .bot-card{ 
+  padding: 1rem; 
+  background-color: var(--bot-card-bgcolor, transparent);
+}
+
+.bot-cards--icon .bot-card__icon{
+  margin: 0 auto 1rem auto;
+}
+
+.bot-cards--icon .bot-card__icon img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 /* Размеры иконок */
-.bot-cards--icon-right .bot-card__icon--small,
-.bot-cards--icon-left .bot-card__icon--small{
+.bot-card__icon--small{
   width: 50px;
   height: 50px;
-  font-size: 20px;
+  font-size: 35px;
 }
 
-.bot-cards--icon-right .bot-card__icon--medium,
-.bot-cards--icon-left .bot-card__icon--medium{
+.bot-card__icon--medium{
   width: 80px;
   height: 80px;
-  font-size: 32px;
+  font-size: 45px;
 }
 
-.bot-cards--icon-right .bot-card__icon--large,
-.bot-cards--icon-left .bot-card__icon--large{
-  width: 120px;
+.bot-card__icon--large{
+  width: 110px;
   height: 120px;
-  font-size: 48px;
+  font-size: 65px;
 }
 
 @media (max-width: 768px){
+  /* Мобильная оптимизация для всех типов карточек */
+  .bot-cards,
+  .bot-cards--icon,
+  .bot-cards--icon-right,
+  .bot-cards--icon-left{
+    --bot-cards-cols: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: var(--bot-gap) !important;
+  }
+  
+  .bot-cards .bot-card{
+    flex: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
   .bot-cards--icon-right .bot-card,
   .bot-cards--icon-left .bot-card{ 
     padding: .75rem; 
+    flex: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
   }
   .bot-cards--icon-right .bot-card__row,
   .bot-cards--icon-left .bot-card__row{ 
@@ -779,25 +838,22 @@ details.bot-faq__item > summary.bot-faq__q:focus{
   .bot-cards--icon-left .bot-card__icon{ 
     width: 40px; 
     height: 40px; 
-    font-size: 20px; 
+    font-size: 24px; 
   }
-  .bot-cards--icon-right .bot-card__icon--small,
-  .bot-cards--icon-left .bot-card__icon--small{
+  .bot-card__icon--small{
     width: 40px;
     height: 40px;
-    font-size: 16px;
+    font-size: 28px;
   }
-  .bot-cards--icon-right .bot-card__icon--medium,
-  .bot-cards--icon-left .bot-card__icon--medium{
+  .bot-card__icon--medium{
     width: 60px;
     height: 60px;
-    font-size: 24px;
+    font-size: 36px;
   }
-  .bot-cards--icon-right .bot-card__icon--large,
-  .bot-cards--icon-left .bot-card__icon--large{
+  .bot-card__icon--large{
     width: 80px;
-    height: 80px;
-    font-size: 32px;
+    height: 90px;
+    font-size: 52px;
   }
 }
 

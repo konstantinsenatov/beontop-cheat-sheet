@@ -139,6 +139,11 @@ const RX = {
   ICON_BG: /^\s*(?:ICON|CARD\s*ICON)\s*(?:BG|BACKGROUND)\s*[:.\-–—)\]]\s*/i,
   ICON_COLOR:  /^\s*(?:ICON|CARD\s*ICON)\s*COLOR\s*[:.\-–—)\]]\s*/i,
   ICON_SIZE: /^\s*(?:ICON|CARD\s*ICON)\s*SIZE\s*[:.\-–—)\]]\s*/i,
+  ICON_BG: /^\s*(?:ICON|CARD\s*ICON)\s*BG\s*[:.\-–—)\]]\s*/i,
+  ICON_FONT_SIZE: /^\s*(?:ICON|CARD\s*ICON)\s*FONT\s*SIZE\s*[:.\-–—)\]]\s*/i,
+  ICON_WIDTH: /^\s*(?:ICON|CARD\s*ICON)\s*WIDTH\s*[:.\-–—)\]]\s*/i,
+  ICON_HEIGHT: /^\s*(?:ICON|CARD\s*ICON)\s*HEIGHT\s*[:.\-–—)\]]\s*/i,
+  ICON_RADIUS: /^\s*(?:ICON|CARD\s*ICON)\s*RADIUS\s*[:.\-–—)\]]\s*/i,
   ICON_BORDER: /^\s*(?:ICON|CARD\s*ICON)\s*(?:BORDER|OUTLINE)\s*[:.\-–—)\]]\s*/i,
 
   // ==== Table settings ====
@@ -586,30 +591,112 @@ function tryPushDirective_(cur, line, htmlLine, scope){
   if (RX.ICON_SIZE.test(txt)){
     const raw = txt.replace(RX.ICON_SIZE,'').trim().toLowerCase();
     
-    // Для нового варианта icon-right и icon-left используем простые размеры
-    if (cur.meta.cardsLayout === 'icon-right' || cur.meta.cardsLayout === 'icon-left') {
-      if (raw === 'small' || raw === 'medium' || raw === 'large') {
+    // Для нового варианта icon-right, icon-left и icon используем простые размеры
+    if (cur.meta.cardsLayout === 'icon-right' || cur.meta.cardsLayout === 'icon-left' || cur.meta.cardsLayout === 'icon') {
+      const presets = {
+        small:  { width:'50px', height:'50px' },
+        medium: { width:'80px', height:'80px' },
+        large:  { width:'120px', height:'120px' }
+      };
+      if (presets[raw]) {
         cur.meta.cardIconSizeClass = raw;
+        cur.meta.cardIconWidth = presets[raw].width;
+        cur.meta.cardIconHeight = presets[raw].height;
+      } else {
+        const px = normPx_(raw);
+        if (px) {
+          cur.meta.cardIconWidth = px;
+          cur.meta.cardIconHeight = px;
+        }
       }
       return true;
     }
     
     // Старая логика для обычных карточек
     const presets = {
-      small:  { fs: 'clamp(16px,2.6vw,24px)', badge:'36px' },
-      medium: { fs: 'clamp(24px,4.5vw,36px)', badge:'48px' },
-      large:  { fs: 'clamp(36px,7vw,56px)',   badge:'64px' }
+      small:  { fs: 'clamp(16px,2.6vw,24px)', badge:'36px', width:'60px', height:'60px' },
+      medium: { fs: 'clamp(24px,4.5vw,36px)', badge:'48px', width:'80px', height:'80px' },
+      large:  { fs: 'clamp(36px,7vw,56px)',   badge:'64px', width:'100px', height:'100px' }
     };
-    let fs = null, badge = null;
+    let fs = null, badge = null, width = null, height = null;
     if (presets[raw]) {
-      fs = presets[raw].fs; badge = presets[raw].badge;
+      fs = presets[raw].fs; badge = presets[raw].badge; 
+      width = presets[raw].width; height = presets[raw].height;
     } else {
       // число → px
       const px = normPx_(raw);
-      if (px){ fs = px; /* бейдж оставим по умолчанию */ }
+      if (px){ 
+        fs = px; 
+        width = px; height = px; // квадратные иконки
+        /* бейдж оставим по умолчанию */ 
+      }
     }
     if (fs)   cur.meta.cardIconSize = fs;
     if (badge)cur.meta.cardBadge    = badge; // красиво масштабирует кружок бейджа
+    if (width) cur.meta.cardIconWidth = width;
+    if (height) cur.meta.cardIconHeight = height;
+    return true;
+  }
+
+  // ICON BG: #color | gradient | url
+  if (RX.ICON_BG.test(txt)){
+    const bg = txt.replace(RX.ICON_BG,'').trim();
+    if (bg) cur.meta.cardIconBg = bg;
+    return true;
+  }
+
+  // ICON FONT SIZE: small|medium|large | <px>
+  if (RX.ICON_FONT_SIZE.test(txt)){
+    const raw = txt.replace(RX.ICON_FONT_SIZE,'').trim().toLowerCase();
+    const presets = {
+      small:  'clamp(12px,2vw,16px)',
+      medium: 'clamp(16px,2.5vw,20px)', 
+      large:  'clamp(20px,3vw,24px)'
+    };
+    if (presets[raw]) {
+      cur.meta.cardIconFontSize = presets[raw];
+    } else {
+      const px = normPx_(raw);
+      if (px) cur.meta.cardIconFontSize = px;
+    }
+    return true;
+  }
+
+  // ICON WIDTH: <px> | <number>
+  if (RX.ICON_WIDTH.test(txt)){
+    const raw = txt.replace(RX.ICON_WIDTH,'').trim();
+    const px = normPx_(raw);
+    if (px) cur.meta.cardIconWidth = px;
+    return true;
+  }
+
+  // ICON HEIGHT: <px> | <number>
+  if (RX.ICON_HEIGHT.test(txt)){
+    const raw = txt.replace(RX.ICON_HEIGHT,'').trim();
+    const px = normPx_(raw);
+    if (px) cur.meta.cardIconHeight = px;
+    return true;
+  }
+
+  // ICON RADIUS: <px> | <number>
+  if (RX.ICON_RADIUS.test(txt)){
+    const raw = txt.replace(RX.ICON_RADIUS,'').trim().toLowerCase();
+    // Предустановки по словам
+    const presets = {
+      circle: '50%',        // полный круг
+      rounded: '50%',       // алиас
+      full: '50%',          // алиас
+      soft: '10px',         // легкий радиус
+      smooth: '10px',       // алиас
+      mild: '10px',         // алиас
+      none: '0'
+    };
+    if (presets[raw]) {
+      cur.meta.cardIconRadius = presets[raw];
+      return true;
+    }
+    const px = normPx_(raw);
+    if (px) cur.meta.cardIconRadius = px;
     return true;
   }
 
@@ -830,9 +917,10 @@ if (RX.TITLE.test(txt)){
       // необязательное соотношение для изображений карточек: Cards 3col 4/5
       const r = arg.match(/(\d+)\s*\/\s*(\d+)/);
       if (r) cur.meta.cardRatio = r[1]+'/'+r[2];
-      // новый вариант: Cards icon-right
-             if (/\bicon-?right\b/.test(arg)) cur.meta.cardsLayout = 'icon-right';
-             if (/\bicon-?left\b/.test(arg)) cur.meta.cardsLayout = 'icon-left';
+               // новый вариант: Cards icon-right, icon-left, icon
+               if (/\bicon-?right\b/.test(arg)) cur.meta.cardsLayout = 'icon-right';
+               if (/\bicon-?left\b/.test(arg)) cur.meta.cardsLayout = 'icon-left';
+               if (/\bicon\b/.test(arg) && !/\bicon-?(right|left)\b/.test(arg)) cur.meta.cardsLayout = 'icon';
     }
     return true;
   }
@@ -2037,11 +2125,12 @@ const RENDERERS = {
     const badgeSide = (sec.meta.cardAlignIcon==='right' || sec.meta.cardAlignIcon==='left') ? sec.meta.cardAlignIcon : null;
            const isIconRight = sec.meta.cardsLayout === 'icon-right';
            const isIconLeft = sec.meta.cardsLayout === 'icon-left';
+           const isIcon = sec.meta.cardsLayout === 'icon';
 
     const lead = sec.blocks.find(b=>b.kind==='lead');
     if (lead?.html) out.push('      <p class="bot-lead bot-center bot-text-muted">'+lead.html+'</p>');
 
-    const cardsClass = isIconRight ? ' bot-cards--icon-right' : (isIconLeft ? ' bot-cards--icon-left' : '');
+    const cardsClass = isIconRight ? ' bot-cards--icon-right' : (isIconLeft ? ' bot-cards--icon-left' : (isIcon ? ' bot-cards--icon' : ''));
     out.push('      <div class="bot-cards'+wrapCls+cardsClass+'" style="--bot-cards-cols:'+cols+';'+cardW+'">');
 
     items.forEach(c=>{
@@ -2054,15 +2143,24 @@ const RENDERERS = {
       out.push('        <article class="bot-card'+ cardAlign + badgeCls +'" style="--bot-card-ratio:'+ratio+';">');
 
       if (isIconRight) {
-        // Новый вариант: заголовок слева, иконка справа, описание отдельным блоком снизу
+        // Новый вариант: заголовок слева, иконка справа, описание внутри заголовочного блока
         out.push('          <div class="bot-card__row">');
-        out.push('            <div class="bot-card__header">');
+        out.push('            <div class="bot-card__content">');
         if (c.title) out.push('              <h3 class="bot-card__title">'+c.title+'</h3>');
+        if (c.descr) out.push('              <p class="bot-card__text">'+c.descr+'</p>');
         out.push('            </div>');
 
         if (c.icon || c.img) {
           const sizeClass = sec.meta.cardIconSizeClass ? ' bot-card__icon--' + sec.meta.cardIconSizeClass : '';
-          out.push('            <div class="bot-card__icon' + sizeClass + '" aria-hidden="true">');
+          const iconStyle = [];
+          if (sec.meta.cardIconBg) iconStyle.push(`background:${sec.meta.cardIconBg}`);
+          if (sec.meta.cardIconColor) iconStyle.push(`color:${sec.meta.cardIconColor}`);
+          if (sec.meta.cardIconFontSize) iconStyle.push(`font-size:${sec.meta.cardIconFontSize}`);
+          if (sec.meta.cardIconWidth) iconStyle.push(`width:${sec.meta.cardIconWidth}`);
+          if (sec.meta.cardIconHeight) iconStyle.push(`height:${sec.meta.cardIconHeight}`);
+          if (sec.meta.cardIconRadius) iconStyle.push(`border-radius:${sec.meta.cardIconRadius}`);
+          const styleAttr = iconStyle.length ? (' style="'+iconStyle.join('; ')+'"') : '';
+          out.push('            <div class="bot-card__icon' + sizeClass + '" aria-hidden="true"'+styleAttr+'>');
           if (c.img) {
             // Изображение как иконка
             out.push('              <img loading="lazy" decoding="async" src="'+c.img+'" alt="">');
@@ -2073,17 +2171,21 @@ const RENDERERS = {
           out.push('            </div>');
         }
         out.push('          </div>');
-
-        if (c.descr) {
-          out.push('          <p class="bot-card__text">'+c.descr+'</p>');
-        }
       } else if (isIconLeft) {
-        // Новый вариант: иконка слева, заголовок справа, описание отдельным блоком снизу
+        // Новый вариант: иконка слева, заголовок справа, описание внутри заголовочного блока
         out.push('          <div class="bot-card__row">');
 
         if (c.icon || c.img) {
           const sizeClass = sec.meta.cardIconSizeClass ? ' bot-card__icon--' + sec.meta.cardIconSizeClass : '';
-          out.push('            <div class="bot-card__icon' + sizeClass + '" aria-hidden="true">');
+          const iconStyle = [];
+          if (sec.meta.cardIconBg) iconStyle.push(`background:${sec.meta.cardIconBg}`);
+          if (sec.meta.cardIconColor) iconStyle.push(`color:${sec.meta.cardIconColor}`);
+          if (sec.meta.cardIconFontSize) iconStyle.push(`font-size:${sec.meta.cardIconFontSize}`);
+          if (sec.meta.cardIconWidth) iconStyle.push(`width:${sec.meta.cardIconWidth}`);
+          if (sec.meta.cardIconHeight) iconStyle.push(`height:${sec.meta.cardIconHeight}`);
+          if (sec.meta.cardIconRadius) iconStyle.push(`border-radius:${sec.meta.cardIconRadius}`);
+          const styleAttr = iconStyle.length ? (' style="'+iconStyle.join('; ')+'"') : '';
+          out.push('            <div class="bot-card__icon' + sizeClass + '" aria-hidden="true"'+styleAttr+'>');
           if (c.img) {
             // Изображение как иконка
             out.push('              <img loading="lazy" decoding="async" src="'+c.img+'" alt="">');
@@ -2094,23 +2196,61 @@ const RENDERERS = {
           out.push('            </div>');
         }
 
-        out.push('            <div class="bot-card__header">');
+        out.push('            <div class="bot-card__content">');
         if (c.title) out.push('              <h3 class="bot-card__title">'+c.title+'</h3>');
+        if (c.descr) out.push('              <p class="bot-card__text">'+c.descr+'</p>');
         out.push('            </div>');
         out.push('          </div>');
-
-        if (c.descr) {
-          out.push('          <p class="bot-card__text">'+c.descr+'</p>');
+      } else if (isIcon) {
+        // Новый вариант: иконка сверху, заголовок и описание снизу
+        out.push('          <div class="bot-card__body">');
+        
+        if (c.icon || c.img) {
+          const sizeClass = sec.meta.cardIconSizeClass ? ' bot-card__icon--' + sec.meta.cardIconSizeClass : '';
+          const iconStyle = [];
+          if (sec.meta.cardIconBg) iconStyle.push(`background:${sec.meta.cardIconBg}`);
+          if (sec.meta.cardIconColor) iconStyle.push(`color:${sec.meta.cardIconColor}`);
+          if (sec.meta.cardIconFontSize) iconStyle.push(`font-size:${sec.meta.cardIconFontSize}`);
+          if (sec.meta.cardIconWidth) iconStyle.push(`width:${sec.meta.cardIconWidth}`);
+          if (sec.meta.cardIconHeight) iconStyle.push(`height:${sec.meta.cardIconHeight}`);
+          if (sec.meta.cardIconRadius) iconStyle.push(`border-radius:${sec.meta.cardIconRadius}`);
+          const styleAttr = iconStyle.length ? (' style="'+iconStyle.join('; ')+'"') : '';
+          out.push('            <div class="bot-card__icon' + sizeClass + '" aria-hidden="true"'+styleAttr+'>');
+          if (c.img) {
+            // Изображение как иконка
+            out.push('              <img loading="lazy" decoding="async" src="'+c.img+'" alt="">');
+          } else if (c.icon) {
+            // Эмодзи или символ
+            out.push('              '+c.icon);
+          }
+          out.push('            </div>');
         }
+        
+        if (c.title) out.push('            <h3 class="bot-card__title">'+c.title+'</h3>');
+        if (c.descr) out.push('            <p class="bot-card__text bot-text-muted">'+c.descr+'</p>');
+        if (c.btnText){
+          out.push('            <div class="bot-card__actions"><a class="bot-btn" href="'+(c.btnUrl||'#')+'">'+c.btnText+'</a></div>');
+        }
+        out.push('          </div>');
       } else {
         // Стандартный вариант
-        if (c.img){
-          out.push('          <img loading="lazy" decoding="async" class="bot-card__media" src="'+c.img+'" alt="">');
-        } else if (c.icon){
-          out.push('          <div class="bot-card__icon" aria-hidden="true">'+c.icon+'</div>');
-        }
-
         out.push('          <div class="bot-card__body">');
+        
+        if (c.img){
+          out.push('            <img loading="lazy" decoding="async" class="bot-card__media" src="'+c.img+'" alt="">');
+        } else if (c.icon){
+          const iconStyle = [];
+          if (sec.meta.cardIconBg) iconStyle.push(`background: ${sec.meta.cardIconBg}`);
+          if (sec.meta.cardIconFontSize) iconStyle.push(`font-size: ${sec.meta.cardIconFontSize}`);
+          if (sec.meta.cardIconColor) iconStyle.push(`color: ${sec.meta.cardIconColor}`);
+          if (sec.meta.cardIconWidth) iconStyle.push(`width: ${sec.meta.cardIconWidth}`);
+          if (sec.meta.cardIconHeight) iconStyle.push(`height: ${sec.meta.cardIconHeight}`);
+          if (sec.meta.cardIconRadius) iconStyle.push(`border-radius:${sec.meta.cardIconRadius}`);
+          
+          const styleAttr = iconStyle.length ? ` style="${iconStyle.join('; ')}"` : '';
+          out.push('            <div class="bot-card__icon"' + styleAttr + ' aria-hidden="true">'+c.icon+'</div>');
+        }
+        
         if (c.title) out.push('            <h3 class="bot-card__title">'+c.title+'</h3>');
         if (c.descr) out.push('            <p class="bot-card__text bot-text-muted">'+c.descr+'</p>');
         if (c.btnText){
