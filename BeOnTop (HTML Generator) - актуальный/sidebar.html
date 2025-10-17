@@ -458,6 +458,14 @@ details[open] .bot-faq__chev::after{ opacity:0; }
   grid-template-areas:
     "image"
     "content";                               /* мобайл: сначала изображение */
+  /* фон строки, задаётся через CSS var из директив */
+  background-color: var(--bot-zig-row-bgcolor, transparent);
+  background-image: var(--bot-zig-row-bgimg, none);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  padding: var(--bot-gap);
+  border-radius: var(--bot-radius, 0px);
 }
 
 @media (min-width:768px){
