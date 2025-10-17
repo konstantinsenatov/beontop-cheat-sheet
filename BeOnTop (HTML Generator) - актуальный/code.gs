@@ -135,6 +135,8 @@ const RX = {
   SECTION_END:   /^[\s\u00A0]*\/\*[\s\u00A0]*end[\s\u00A0]*\*\/[\s\u00A0]*$/i,
   ZIG_ORDER:   /^\s*(?:ZIG|ZIGZAG)\s*(?:ORDER|MODE)\s*[:.\-–—)\]]\s*/i,
   ZIG_ROW_BG:  /^\s*(?:ROW|ZIG|ZIGZAG)\s*(?:BG|BACKGROUND)\s*[:.\-–—)\]]\s*/i,
+  ZIG_ROW_EVEN_BG: /^\s*(?:ROW|ZIG|ZIGZAG)\s*(?:EVEN|PAIR|2N)\s*(?:BG|BACKGROUND)\s*[:.\-–—)\]]\s*/i,
+  ZIG_ROW_ODD_BG:  /^\s*(?:ROW|ZIG|ZIGZAG)\s*(?:ODD|UNPAIR|2N\+1)\s*(?:BG|BACKGROUND)\s*[:.\-–—)\]]\s*/i,
   CARD_ALIGN_ICON: /^\s*CARD\s+ALIGN\s+ICON\s*[:=]\s*(.+)\s*$/i,
   ICON_BG: /^\s*(?:ICON|CARD\s*ICON)\s*(?:BG|BACKGROUND)\s*[:.\-–—)\]]\s*/i,
   ICON_COLOR:  /^\s*(?:ICON|CARD\s*ICON)\s*COLOR\s*[:.\-–—)\]]\s*/i,
@@ -1496,6 +1498,32 @@ if (RX.TITLE.test(txt)){
     return true;
   }
 
+  // ROW EVEN BG: цвет | gradient(...) | URL | url(...)
+  if (RX.ZIG_ROW_EVEN_BG.test(txt) && cur.type==='zigzag'){
+    const vRaw = txt.replace(RX.ZIG_ROW_EVEN_BG,'').trim();
+    if (vRaw){
+      const isUrl  = /^https?:\/\//i.test(vRaw) || /^data:/i.test(vRaw) || /^url\(/i.test(vRaw);
+      const isGrad = /gradient\(/i.test(vRaw);
+      const isCol  = /^#|^rgb|^hsl|^var\(/i.test(vRaw);
+      if (isUrl || isGrad) cur.meta.rowEvenBgImg   = /^url\(/i.test(vRaw) ? vRaw : "url('"+esc_(vRaw)+"')";
+      else                 cur.meta.rowEvenBgColor = vRaw;
+    }
+    return true;
+  }
+
+  // ROW ODD BG: цвет | gradient(...) | URL | url(...)
+  if (RX.ZIG_ROW_ODD_BG.test(txt) && cur.type==='zigzag'){
+    const vRaw = txt.replace(RX.ZIG_ROW_ODD_BG,'').trim();
+    if (vRaw){
+      const isUrl  = /^https?:\/\//i.test(vRaw) || /^data:/i.test(vRaw) || /^url\(/i.test(vRaw);
+      const isGrad = /gradient\(/i.test(vRaw);
+      const isCol  = /^#|^rgb|^hsl|^var\(/i.test(vRaw);
+      if (isUrl || isGrad) cur.meta.rowOddBgImg   = /^url\(/i.test(vRaw) ? vRaw : "url('"+esc_(vRaw)+"')";
+      else                 cur.meta.rowOddBgColor = vRaw;
+    }
+    return true;
+  }
+
 
 
 
@@ -1975,8 +2003,22 @@ const RENDERERS = {
       const right = byBg ? hasBg : (i % 2 === 1);     // ← ключевая логика
 
       const rowStyle = [];
-      if (r.bg?.color) rowStyle.push(`--bot-zig-row-bgcolor:${r.bg.color}`);
-      if (r.bg?.img)   rowStyle.push(`--bot-zig-row-bgimg:${r.bg.img}`);
+      // локальный фон строки имеет приоритет
+      let bgColor = r.bg?.color || null;
+      let bgImg   = r.bg?.img || null;
+      if (!bgColor && !bgImg){
+        // подставляем глобальные EVEN/ODD
+        const isOdd = (i % 2 === 1);
+        if (isOdd){
+          bgColor = sec.meta.rowOddBgColor || null;
+          bgImg   = sec.meta.rowOddBgImg   || null;
+        } else {
+          bgColor = sec.meta.rowEvenBgColor || null;
+          bgImg   = sec.meta.rowEvenBgImg   || null;
+        }
+      }
+      if (bgColor) rowStyle.push(`--bot-zig-row-bgcolor:${bgColor}`);
+      if (bgImg)   rowStyle.push(`--bot-zig-row-bgimg:${bgImg}`);
 
       out.push('        <div class="bot-zigzag__row'
               + (right?' is-right':'')
