@@ -174,17 +174,11 @@
   color: var(--bot-btn-color, currentColor);
 }
 .bot-hero.is-split  .bot-hero__cta{ display: flex; flex-direction: column; gap: 10px }
-.bot-btn:hover,.bot-btn:focus{ outline:none; box-shadow:0 0 0 calc(var(--bot-line)*2) currentColor; }
 
 /* Кнопки наследуют цвет из секции, можно переопределить переменной */
 .bot-section .bot-btn{
   color: var(--bot-btn-color, currentColor);
   border-color: var(--bot-btn-color, currentColor);
-}
-.bot-section .bot-btn:hover,
-.bot-section .bot-btn:focus{
-  outline:none;
-  box-shadow: 0 0 0 calc(var(--bot-line)*2) var(--bot-btn-color, currentColor);
 }
 
 .bot-actions{ display:flex; flex-wrap:wrap; gap:.5rem; }
@@ -407,12 +401,6 @@ details.bot-faq__item > summary::marker { content:''; }
 .bot-faq__chev::after{ transform: translate(-50%,-50%) rotate(90deg); }
 details[open] .bot-faq__chev::after{ opacity:0; }
 
-/* Ховеры/фокус у summary */
-details.bot-faq__item > summary.bot-faq__q:hover,
-details.bot-faq__item > summary.bot-faq__q:focus{
-  outline:none;
-  box-shadow: 0 0 0 calc(var(--bot-line)*2) currentColor inset;
-}
 
 /* Кнопка в конце FAQ */
 .bot-faq__actions{ display:flex; justify-content:center; gap:.5rem; }
@@ -546,9 +534,6 @@ details.bot-faq__item > summary.bot-faq__q:focus{
 .bot-card{
   box-shadow: var(--bot-card-shadow, none);
   transition: box-shadow .2s ease;
-}
-.bot-card:hover{
-  box-shadow: var(--bot-card-shadow-hover, var(--bot-card-shadow, none));
 }
 
 /* Cards: last row centered (flex-wrap mode) */
