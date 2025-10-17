@@ -1999,15 +1999,12 @@ const RENDERERS = {
     const byBg = !!sec.meta.zigByBg;
 
     rows.forEach((r, i)=>{
-      const hasBg = !!(r.bg && (r.bg.color || r.bg.img));
-      const right = byBg ? hasBg : (i % 2 === 1);     // ← ключевая логика
-
       const rowStyle = [];
-      // локальный фон строки имеет приоритет
+      // Локальный фон строки имеет приоритет
       let bgColor = r.bg?.color || null;
       let bgImg   = r.bg?.img || null;
+      // Если локального нет — подставляем глобальные EVEN/ODD
       if (!bgColor && !bgImg){
-        // подставляем глобальные EVEN/ODD
         const isOdd = (i % 2 === 1);
         if (isOdd){
           bgColor = sec.meta.rowOddBgColor || null;
@@ -2017,12 +2014,22 @@ const RENDERERS = {
           bgImg   = sec.meta.rowEvenBgImg   || null;
         }
       }
+      const hasEffectiveBg = !!(bgColor || bgImg);
+      // Флаг направления
+      let right;
+      if (byBg){
+        const hasGlobal = !!(sec.meta.rowEvenBgColor || sec.meta.rowEvenBgImg || sec.meta.rowOddBgColor || sec.meta.rowOddBgImg);
+        right = hasGlobal ? (i % 2 === 1) : hasEffectiveBg; // если заданы глобальные — чередуем по индексу, иначе: только строки с фоном вправо
+      } else {
+        right = (i % 2 === 1);
+      }
+
       if (bgColor) rowStyle.push(`--bot-zig-row-bgcolor:${bgColor}`);
       if (bgImg)   rowStyle.push(`--bot-zig-row-bgimg:${bgImg}`);
 
       out.push('        <div class="bot-zigzag__row'
               + (right?' is-right':'')
-              + (hasBg?' has-bg':'')
+              + (hasEffectiveBg?' has-bg':'')
               + '" style="'+rowStyle.join(';')+'">');
 
       // колонка с картинкой (всегда идёт первой в DOM — на мобиле она будет сверху)
