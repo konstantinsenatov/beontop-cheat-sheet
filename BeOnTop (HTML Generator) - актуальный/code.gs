@@ -24,6 +24,8 @@ const RX = {
 
   // Соотношение сторон картинок (media): IMAGE SIZE (RATIO): 3/2
   IMG_SIZE: /^\s*IMAGE\s*SIZE\s*\(\s*RATIO\s*\)\s*[:.\-–—)\]]\s*/i,
+  IMG_FULL: /^\s*(?:IMG|IMAGE)\s*(?:FULL\s*HEIGHT|FULL|COVER)\s*[:.\-–—)\]]?\s*$/i,
+  IMG_MINH: /^\s*(?:IMG|IMAGE)\s*MIN\s*HEIGHT\s*[:.\-–—)\]]\s*/i,
 
   // Подпись к картинке (media)
   CAP: /^\s*CAP\s*[:.\-–—)\]]\s*/i,
@@ -1115,6 +1117,19 @@ if (RX.TITLE.test(txt)){
     return true;
   }
 
+  // IMAGE FULL HEIGHT (media): включает режим растягивания изображения по высоте секции
+  if (RX.IMG_FULL.test(txt)){
+    cur.meta.mediaImgFull = true;
+    return true;
+  }
+  // IMAGE MIN HEIGHT (media): минимум по высоте для колонки изображения
+  if (RX.IMG_MINH.test(txt)){
+    const raw = txt.replace(RX.IMG_MINH,'').trim();
+    const m = raw.match(/(\d+)/);
+    if (m) cur.meta.mediaImgMinH = m[1] + 'px';
+    return true;
+  }
+
   // MIN HEIGHT: минимальная высота (px)
   if (RX.MINH.test(txt)){
     const raw = txt.replace(RX.MINH,'').trim();
@@ -1921,12 +1936,15 @@ const RENDERERS = {
     let imgFr = 1, contentFr = 1;
     if (Array.isArray(sec.meta.cols)) { imgFr = sec.meta.cols[0]; contentFr = sec.meta.cols[1]; }
     const widthVars = `--bot-media-img:${imgFr}fr;--bot-media-content:${contentFr}fr;`;
+    const imgHeightVars = (sec.meta.mediaImgFull || sec.meta.mediaImgMinH)
+      ? (sec.meta.mediaImgFull ? '--bot-media-img-full:1;' : '') + (sec.meta.mediaImgMinH ? `--bot-media-img-minh:${sec.meta.mediaImgMinH};` : '')
+      : '';
 
     out.push(
       '      <div class="bot-media'
       + (right ? ' is-right' : '')
       + (stacked ? ' is-stacked' : '')
-      + `" style="--bot-media-ratio:${ratio};${widthVars}">`
+      + `" style="--bot-media-ratio:${ratio};${widthVars}${imgHeightVars}">`
     );
 
     // колонка с картинкой

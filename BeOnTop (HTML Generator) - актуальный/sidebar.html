@@ -263,7 +263,17 @@
 .bot-media__imgcol{ grid-area: image; }
 .bot-media__txtcol{ grid-area: content; }
 .bot-media__figure{ margin:0; }
-.bot-media__img{ aspect-ratio: var(--bot-media-ratio, 4/3); object-fit:cover; width:100%; }
+.bot-media__img{
+  aspect-ratio: var(--bot-media-ratio, 4/3);
+  object-fit:cover; width:100%; height:auto;
+}
+/* Full-height image option */
+.bot-media[style*="--bot-media-img-full:1"] .bot-media__img{
+  height: 100%; width: 100%; object-fit: cover;
+}
+.bot-media[style*="--bot-media-img-minh:"] .bot-media__img{
+  min-height: var(--bot-media-img-minh);
+}
 .bot-media__cap{ margin-top:.35rem; }
 .bot-media__img{
   aspect-ratio: var(--bot-media-ratio, 4/3);
