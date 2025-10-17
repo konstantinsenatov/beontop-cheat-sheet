@@ -2146,7 +2146,13 @@ const RENDERERS = {
         // Новый вариант: заголовок слева, иконка справа, описание внутри заголовочного блока
         out.push('          <div class="bot-card__row">');
         out.push('            <div class="bot-card__content">');
-        if (c.title) out.push('              <h3 class="bot-card__title">'+c.title+'</h3>');
+        {
+          const href = safeHref_(c.btnUrl||'#');
+          if (c.title){
+            const titleHtml = c.btnText ? ('<a href="'+href+'">'+c.title+'</a>') : c.title;
+            out.push('              <h3 class="bot-card__title">'+titleHtml+'</h3>');
+          }
+        }
         if (c.descr) out.push('              <p class="bot-card__text">'+c.descr+'</p>');
         out.push('            </div>');
 
@@ -2161,12 +2167,15 @@ const RENDERERS = {
           if (sec.meta.cardIconRadius) iconStyle.push(`border-radius:${sec.meta.cardIconRadius}`);
           const styleAttr = iconStyle.length ? (' style="'+iconStyle.join('; ')+'"') : '';
           out.push('            <div class="bot-card__icon' + sizeClass + '" aria-hidden="true"'+styleAttr+'>');
-          if (c.img) {
-            // Изображение как иконка
-            out.push('              <img loading="lazy" decoding="async" src="'+c.img+'" alt="">');
-          } else if (c.icon) {
-            // Эмодзи или символ
-            out.push('              '+c.icon);
+          {
+            const href = safeHref_(c.btnUrl||'#');
+            if (c.img) {
+              const inner = '              <img loading="lazy" decoding="async" src="'+c.img+'" alt="">';
+              out.push( c.btnText ? ('              <a href="'+href+'">'+inner+'              </a>') : inner );
+            } else if (c.icon) {
+              const inner = '              '+c.icon;
+              out.push( c.btnText ? ('              <a href="'+href+'">'+inner+'              </a>') : inner );
+            }
           }
           out.push('            </div>');
         }
@@ -2186,18 +2195,27 @@ const RENDERERS = {
           if (sec.meta.cardIconRadius) iconStyle.push(`border-radius:${sec.meta.cardIconRadius}`);
           const styleAttr = iconStyle.length ? (' style="'+iconStyle.join('; ')+'"') : '';
           out.push('            <div class="bot-card__icon' + sizeClass + '" aria-hidden="true"'+styleAttr+'>');
-          if (c.img) {
-            // Изображение как иконка
-            out.push('              <img loading="lazy" decoding="async" src="'+c.img+'" alt="">');
-          } else if (c.icon) {
-            // Эмодзи или символ
-            out.push('              '+c.icon);
+          {
+            const href = safeHref_(c.btnUrl||'#');
+            if (c.img) {
+              const inner = '              <img loading="lazy" decoding="async" src="'+c.img+'" alt="">';
+              out.push( c.btnText ? ('              <a href="'+href+'">'+inner+'              </a>') : inner );
+            } else if (c.icon) {
+              const inner = '              '+c.icon;
+              out.push( c.btnText ? ('              <a href="'+href+'">'+inner+'              </a>') : inner );
+            }
           }
           out.push('            </div>');
         }
 
         out.push('            <div class="bot-card__content">');
-        if (c.title) out.push('              <h3 class="bot-card__title">'+c.title+'</h3>');
+        {
+          const href = safeHref_(c.btnUrl||'#');
+          if (c.title){
+            const titleHtml = c.btnText ? ('<a href="'+href+'">'+c.title+'</a>') : c.title;
+            out.push('              <h3 class="bot-card__title">'+titleHtml+'</h3>');
+          }
+        }
         if (c.descr) out.push('              <p class="bot-card__text">'+c.descr+'</p>');
         out.push('            </div>');
         out.push('          </div>');
@@ -2216,17 +2234,26 @@ const RENDERERS = {
           if (sec.meta.cardIconRadius) iconStyle.push(`border-radius:${sec.meta.cardIconRadius}`);
           const styleAttr = iconStyle.length ? (' style="'+iconStyle.join('; ')+'"') : '';
           out.push('            <div class="bot-card__icon' + sizeClass + '" aria-hidden="true"'+styleAttr+'>');
-          if (c.img) {
-            // Изображение как иконка
-            out.push('              <img loading="lazy" decoding="async" src="'+c.img+'" alt="">');
-          } else if (c.icon) {
-            // Эмодзи или символ
-            out.push('              '+c.icon);
+          {
+            const href = safeHref_(c.btnUrl||'#');
+            if (c.img) {
+              const inner = '              <img loading="lazy" decoding="async" src="'+c.img+'" alt="">';
+              out.push( c.btnText ? ('              <a href="'+href+'">'+inner+'              </a>') : inner );
+            } else if (c.icon) {
+              const inner = '              '+c.icon;
+              out.push( c.btnText ? ('              <a href="'+href+'">'+inner+'              </a>') : inner );
+            }
           }
           out.push('            </div>');
         }
         
-        if (c.title) out.push('            <h3 class="bot-card__title">'+c.title+'</h3>');
+        {
+          const href = safeHref_(c.btnUrl||'#');
+          if (c.title){
+            const titleHtml = c.btnText ? ('<a href="'+href+'">'+c.title+'</a>') : c.title;
+            out.push('            <h3 class="bot-card__title">'+titleHtml+'</h3>');
+          }
+        }
         if (c.descr) out.push('            <p class="bot-card__text bot-text-muted">'+c.descr+'</p>');
         if (c.btnText){
           out.push('            <div class="bot-card__actions"><a class="bot-btn" href="'+(c.btnUrl||'#')+'">'+c.btnText+'</a></div>');
@@ -2237,7 +2264,9 @@ const RENDERERS = {
         out.push('          <div class="bot-card__body">');
         
         if (c.img){
-          out.push('            <img loading="lazy" decoding="async" class="bot-card__media" src="'+c.img+'" alt="">');
+          const href = safeHref_(c.btnUrl||'#');
+          const inner = '<img loading="lazy" decoding="async" class="bot-card__media" src="'+c.img+'" alt="">';
+          out.push('            '+ (c.btnText ? ('<a href="'+href+'">'+inner+'</a>') : inner) );
         } else if (c.icon){
           const iconStyle = [];
           if (sec.meta.cardIconBg) iconStyle.push(`background: ${sec.meta.cardIconBg}`);
@@ -2248,10 +2277,20 @@ const RENDERERS = {
           if (sec.meta.cardIconRadius) iconStyle.push(`border-radius:${sec.meta.cardIconRadius}`);
           
           const styleAttr = iconStyle.length ? ` style="${iconStyle.join('; ')}"` : '';
-          out.push('            <div class="bot-card__icon"' + styleAttr + ' aria-hidden="true">'+c.icon+'</div>');
+          {
+            const href = safeHref_(c.btnUrl||'#');
+            const inner = '<div class="bot-card__icon"' + styleAttr + ' aria-hidden="true">'+c.icon+'</div>';
+            out.push('            '+ (c.btnText ? ('<a href="'+href+'">'+inner+'</a>') : inner) );
+          }
         }
         
-        if (c.title) out.push('            <h3 class="bot-card__title">'+c.title+'</h3>');
+        {
+          const href = safeHref_(c.btnUrl||'#');
+          if (c.title){
+            const titleHtml = c.btnText ? ('<a href="'+href+'">'+c.title+'</a>') : c.title;
+            out.push('            <h3 class="bot-card__title">'+titleHtml+'</h3>');
+          }
+        }
         if (c.descr) out.push('            <p class="bot-card__text bot-text-muted">'+c.descr+'</p>');
         if (c.btnText){
           out.push('            <div class="bot-card__actions"><a class="bot-btn" href="'+(c.btnUrl||'#')+'">'+c.btnText+'</a></div>');
