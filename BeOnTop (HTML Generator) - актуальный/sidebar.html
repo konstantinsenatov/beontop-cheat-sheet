@@ -229,7 +229,7 @@
 
 /* ============================== MEDIA (img + content) ============================== */
 .bot-media{
-  display:grid; gap:var(--bot-gap);
+  display:grid; gap:var(--bot-media-gap, var(--bot-gap));
   grid-template-areas:
     "image"
     "content";
@@ -460,10 +460,10 @@ details[open] .bot-faq__chev::after{ opacity:0; }
 .bot-seo b{ font-weight: 700; }
 
 /* ============================== ZIGZAG ============================== */
-.bot-zigzag{ display:grid; gap:var(--bot-gap); }
+.bot-zigzag{ display:grid; gap:var(--bot-zig-gap, var(--bot-gap)); }
 
 .bot-zigzag__row{
-  display:grid; gap:var(--bot-gap);
+  display:grid; gap:var(--bot-zig-gap, var(--bot-gap));
   grid-template-columns: 1fr;               /* мобильный стек */
   grid-template-areas:
     "image"
@@ -474,7 +474,7 @@ details[open] .bot-faq__chev::after{ opacity:0; }
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  padding: var(--bot-gap);
+  padding: var(--bot-zig-row-p, var(--bot-gap));
   border-radius: var(--bot-radius, 0px);
 }
 

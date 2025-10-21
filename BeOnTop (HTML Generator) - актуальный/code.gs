@@ -76,6 +76,7 @@ const RX = {
   MARGIN_CONTAINER: /^\s*MARGIN\s*CONTAINER\s*[:.\-–—)\]]\s*/i,
   PADDING_SECTION:  /^\s*(?:PADDING|PAD)\s*SECTION\s*[:.\-–—)\]]\s*/i,
   PADDING_CONTAINER:/^\s*(?:PADDING|PAD)\s*CONTAINER\s*[:.\-–—)\]]\s*/i,
+  PADDING_CONTENT:/^\s*(?:PADDING|PAD)\s*(?:CONTENT|TXT|TEXT|BODY)\s*[:.\-–—)\]]\s*/i,
   TITLE: /^\s*TITLE\s*[:.\-–—)\]]\s*/i,   // TITLE: Текст секционного H2 (пусто или "-" — скрыть)
   OVERLAY_CONTAINER: /^\s*(?:BG\s*OVERLAY|OVERLAY)\s*CONTAINER\s*[:.\-–—)\]]\s*/i,
   LEAD: /^\s*(?:LEAD|LEDE|INTRO)\s*[:.\-–—)\]]\s*/i,
@@ -133,12 +134,15 @@ const RX = {
   CARDS_WRAP: /^\s*(?:CARDS?\s*WRAP|CARDS?\s*MODE|WRAP)\s*[:.\-–—)\]]\s*/i,
   CARD_WIDTH:/^\s*CARD\s*WIDTH\s*[:.\-–—)\]]\s*/i,
   GALLERY_GAP: /^\s*(?:GAP|GRID\s*GAP|GALLERY\s*GAP)\s*[:.\-–—)\]]\s*/i,
+  MEDIA_GAP: /^\s*(?:MEDIA\s*GAP|GAP)\s*[:.\-–—)\]]\s*/i,
   SECTION_START: /^[\s\u00A0]*\/\*[\s\u00A0]*start[\s\u00A0]*\*\/[\s\u00A0]*$/i,
   SECTION_END:   /^[\s\u00A0]*\/\*[\s\u00A0]*end[\s\u00A0]*\*\/[\s\u00A0]*$/i,
   ZIG_ORDER:   /^\s*(?:ZIG|ZIGZAG)\s*(?:ORDER|MODE)\s*[:.\-–—)\]]\s*/i,
   ZIG_ROW_BG:  /^\s*(?:ROW|ZIG|ZIGZAG)\s*(?:BG|BACKGROUND)\s*[:.\-–—)\]]\s*/i,
   ZIG_ROW_EVEN_BG: /^\s*(?:ROW|ZIG|ZIGZAG)\s*(?:EVEN|PAIR|2N)\s*(?:BG|BACKGROUND)\s*[:.\-–—)\]]\s*/i,
   ZIG_ROW_ODD_BG:  /^\s*(?:ROW|ZIG|ZIGZAG)\s*(?:ODD|UNPAIR|2N\+1)\s*(?:BG|BACKGROUND)\s*[:.\-–—)\]]\s*/i,
+  ZIG_GAP: /^\s*(?:ROW|ZIG|ZIGZAG)\s*GAP\s*[:.\-–—)\]]\s*/i,
+  ZIG_ROW_P: /^\s*(?:ROW|ZIG|ZIGZAG)\s*(?:PADDING|PAD|ROW\s*PAD)\s*[:.\-–—)\]]\s*/i,
   CARD_ALIGN_ICON: /^\s*CARD\s+ALIGN\s+ICON\s*[:=]\s*(.+)\s*$/i,
   ICON_BG: /^\s*(?:ICON|CARD\s*ICON)\s*(?:BG|BACKGROUND)\s*[:.\-–—)\]]\s*/i,
   ICON_COLOR:  /^\s*(?:ICON|CARD\s*ICON)\s*COLOR\s*[:.\-–—)\]]\s*/i,
@@ -992,6 +996,14 @@ if (RX.TITLE.test(txt)){
     return true;
   }
 
+  // MEDIA GAP: 0 | 8 | 12 16 → берём первую величину
+  if (RX.MEDIA_GAP && RX.MEDIA_GAP.test(txt) && cur.type === 'media'){
+    const raw = txt.replace(RX.MEDIA_GAP,'').trim();
+    const m = raw.match(/(\d+(?:px)?)/);
+    if (m) cur.meta.mediaGap = /px$/.test(m[1]) ? m[1] : (m[1] + 'px');
+    return true;
+  }
+
 
   // BG SECTION: цвет | градиент | URL | url(...)
   if (RX.BG_SECTION.test(txt)){
@@ -1071,6 +1083,13 @@ if (RX.TITLE.test(txt)){
   if (RX.PADDING_CONTAINER.test(txt)){
     const box = normBox_(txt.replace(RX.PADDING_CONTAINER,''));
     if (box) cur.meta.containerPadding = box;
+    return true;
+  }
+
+  // PADDING CONTENT: 24 16 (внутренние отступы колонки с текстом)
+  if (RX.PADDING_CONTENT.test(txt)){
+    const box = normBox_(txt.replace(RX.PADDING_CONTENT,''));
+    if (box) cur.meta.contentPadding = box;
     return true;
   }
 
@@ -1539,6 +1558,20 @@ if (RX.TITLE.test(txt)){
     return true;
   }
 
+  // ZIG GAP: 0 | 12 | 8 12
+  if (RX.ZIG_GAP.test(txt) && cur.type==='zigzag'){
+    const box = normBox_(txt.replace(RX.ZIG_GAP,''));
+    if (box) cur.meta.zigGap = box;
+    return true;
+  }
+
+  // ROW PADDING: 0 | 12 | 8 12
+  if (RX.ZIG_ROW_P.test(txt) && cur.type==='zigzag'){
+    const box = normBox_(txt.replace(RX.ZIG_ROW_P,''));
+    if (box) cur.meta.zigRowP = box;
+    return true;
+  }
+
 
 
 
@@ -1940,11 +1973,12 @@ const RENDERERS = {
       ? (sec.meta.mediaImgFull ? '--bot-media-img-full:1;' : '') + (sec.meta.mediaImgMinH ? `--bot-media-img-minh:${sec.meta.mediaImgMinH};` : '')
       : '';
 
+    const mediaGapVar = sec.meta.mediaGap ? `--bot-media-gap:${sec.meta.mediaGap};` : '';
     out.push(
       '      <div class="bot-media'
       + (right ? ' is-right' : '')
       + (stacked ? ' is-stacked' : '')
-      + `" style="--bot-media-ratio:${ratio};${widthVars}${imgHeightVars}">`
+      + `" style="--bot-media-ratio:${ratio};${widthVars}${imgHeightVars}${mediaGapVar}">`
     );
 
     // колонка с картинкой
@@ -1960,15 +1994,12 @@ const RENDERERS = {
     out.push('        </div>');
 
     // колонка с текстом
-    out.push('        <div class="bot-media__col bot-media__txtcol"'
-           + (tAlign ? ` style="text-align:${tAlign};"` : '')
-           + '>');
-    // Если пользователь не добавил заголовок в контент, но указал TITLE:, выведем его автоматически
-    const hasContentHeading = sec.blocks.some(b=>b.kind==='h');
-    if (!hasContentHeading && (sec.title || '').trim()){
-      const safeTitle = esc_(sec.title);
-      out.push('          <h2 style="margin:0 0 .5rem 0; line-height:1.2;">'+safeTitle+'</h2>');
-    }
+    const txtStyleParts = [];
+    if (tAlign) txtStyleParts.push(`text-align:${tAlign}`);
+    if (sec.meta.contentPadding) txtStyleParts.push(`padding:${sec.meta.contentPadding}`);
+    const txtStyleAttr = txtStyleParts.length ? ` style="${txtStyleParts.join(';')}"` : '';
+    out.push('        <div class="bot-media__col bot-media__txtcol"'+txtStyleAttr+'>');
+    // Не дублируем заголовок: секционный H2 выше уже выведен
     sec.blocks.forEach(b=>{
       if (b.kind==='img' || b.kind==='btn' || b.kind==='cta') return;
       if (b.kind==='h')   out.push(`          <h${b.level} style="margin:0 0 .5rem 0; line-height:1.2;">${b.html}</h${b.level}>`);
@@ -2012,7 +2043,10 @@ const RENDERERS = {
     const lead = sec.blocks.find(b=>b.kind==='lead');
     if (lead?.html) out.push('      <p class="bot-lead bot-center bot-text-muted">'+lead.html+'</p>');
 
-    out.push('      <div class="bot-zigzag" style="'+gridVars+'">');
+    const extraZigVars = [];
+    if (sec.meta.zigGap) extraZigVars.push(`--bot-zig-gap:${sec.meta.zigGap}`);
+    if (sec.meta.zigRowP) extraZigVars.push(`--bot-zig-row-p:${sec.meta.zigRowP}`);
+    out.push('      <div class="bot-zigzag" style="'+gridVars+(extraZigVars.length?(';'+extraZigVars.join(';')):'')+'">');
 
     const byBg = !!sec.meta.zigByBg;
 
@@ -2062,8 +2096,9 @@ const RENDERERS = {
       }
       out.push('          </div>');
 
-      // колонка с текстом
-      out.push('          <div class="bot-zigzag__col bot-zigzag__txtcol">');
+      // колонка с текстом (поддержка PADDING CONTENT)
+      const zigTxtStyle = sec.meta.contentPadding ? ` style="padding:${sec.meta.contentPadding}"` : '';
+      out.push('          <div class="bot-zigzag__col bot-zigzag__txtcol"'+zigTxtStyle+'>');
       r.content.forEach(b=>{
         if (b.kind==='h')      out.push(`            <h${b.level} style="margin:0 0 .5rem 0; line-height:1.2;">${b.html}</h${b.level}>`);
         else if (b.kind==='p') out.push('            <p class="bot-text-muted" style="margin:.25rem 0 0 0;">'+b.html+'</p>');
