@@ -732,7 +732,12 @@ function tryPushDirective_(cur, line, htmlLine, scope){
   // CARD ALIGN ICON: left | right  → абсолютная иконка-бейдж
   if (RX.CARD_ALIGN_ICON.test(txt)) {
     const v = txt.replace(RX.CARD_ALIGN_ICON, '$1').trim().toLowerCase();
-    if (v==='left' || v==='right') cur.meta.cardAlignIcon = v;   // ← метка для рендерера/CSS
+    if (v==='left' || v==='right') {
+      cur.meta.cardAlignIcon = v;   // ← бейдж (абсолют)
+    } else if (v==='center') {
+      // Центрируем ТОЛЬКО иконку, не затрагивая выравнивание текста
+      cur.meta.cardAlignIconOnly = 'center';
+    }
     return true;
   }
 
@@ -2225,6 +2230,7 @@ const RENDERERS = {
     const cardW   = sec.meta.cardW ? `--bot-card-w:${sec.meta.cardW};` : '';
 
     const badgeSide = (sec.meta.cardAlignIcon==='right' || sec.meta.cardAlignIcon==='left') ? sec.meta.cardAlignIcon : null;
+    const iconOnlyCenter = (sec.meta.cardAlignIconOnly === 'center');
            const isIconRight = sec.meta.cardsLayout === 'icon-right';
            const isIconLeft = sec.meta.cardsLayout === 'icon-left';
            const isIcon = sec.meta.cardsLayout === 'icon';
@@ -2236,13 +2242,16 @@ const RENDERERS = {
     out.push('      <div class="bot-cards'+wrapCls+cardsClass+'" style="--bot-cards-cols:'+cols+';'+cardW+'">');
 
     items.forEach(c=>{
-      const ratio = globalRatio || (c.img ? '4/3' : '4/1');
+      const hasImg = !!c.img;
+      const ratio = globalRatio || (hasImg ? '4/3' : '');
       const cardAlign = sec.meta?.cardAlign ? ' align-' + sec.meta.cardAlign : '';
+      const iconOnlyCls = iconOnlyCenter ? ' icon-only-center' : '';
 
       // классы для режима бейджа
       const badgeCls = badgeSide ? (' has-icon-abs is-'+badgeSide) : '';
 
-      out.push('        <article class="bot-card'+ cardAlign + badgeCls +'" style="--bot-card-ratio:'+ratio+';">');
+      const ratioStyle = (hasImg || globalRatio) ? ` style="--bot-card-ratio:${ratio};"` : '';
+      out.push('        <article class="bot-card'+ cardAlign + badgeCls + iconOnlyCls +'"'+ratioStyle+'>');
 
       if (isIconRight) {
         // Новый вариант: заголовок слева, иконка справа, описание внутри заголовочного блока
